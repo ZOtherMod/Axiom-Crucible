@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axiom & Crucible - Tier-0 Weapon Builder</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="ui/enhanced-styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Axiom & Crucible</h1>
+            <h2>Tier-0 Engineering & Logic Module Weapon Builder</h2>
+            <p class="subtitle">Create your weapon by selecting a shell and adding layer cards</p>
+        </header>
+
+        <div class="builder-layout">
+            <!-- Shell Selection -->
+            <section class="shell-selection" id="shell-selection">
+                <!-- Content will be dynamically generated -->
+            </section>
+
+            <!-- Layer Card Pool -->
+            <section class="layer-cards" id="layer-cards">
+                <!-- Content will be dynamically generated -->
+            </section>
+
+            <!-- Weapon Builder Area -->
+            <section class="weapon-builder">
+                <h3>3. Your Weapon Design</h3>
+                <div class="weapon-display" id="weapon-display">
+                    <div class="no-shell-message">
+                        <p>Select a shell above to begin building your weapon</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Weapon Summary -->
+            <section class="weapon-summary" id="weapon-summary">
+                <!-- Content will be dynamically generated -->
+            </section>
+        </div>
+    </div>
+
+    <!-- Load scripts in dependency order -->
+    <script src="data/gameData.js"></script>
+    <script src="core/engine.js"></script>
+    <script src="ui/uiManager.js"></script>
+    <script src="ui/components.js"></script>
+    <script src="ui/additionalComponents.js"></script>
+    <script src="modules/weaponBuilder.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

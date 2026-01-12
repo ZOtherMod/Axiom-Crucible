@@ -1,0 +1,612 @@
+/* Axiom & Crucible - Weapon Builder Styles */
+
+:root {
+    --primary-color: #2c3e50;
+    --secondary-color: #3498db;
+    --accent-color: #e74c3c;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --background: #ecf0f1;
+    --card-bg: #ffffff;
+    --border-color: #bdc3c7;
+    --text-dark: #2c3e50;
+    --text-light: #7f8c8d;
+    --shadow: 0 2px 4px rgba(0,0,0,0.1);
+    --shadow-hover: 0 4px 8px rgba(0,0,0,0.15);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background);
+    color: var(--text-dark);
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+header h1 {
+    color: var(--primary-color);
+    font-size: 2.5em;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+header h2 {
+    color: var(--secondary-color);
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    font-weight: 400;
+}
+
+.subtitle {
+    color: var(--text-light);
+    font-size: 1.1em;
+}
+
+.builder-layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+/* Shell Selection Styles */
+.shell-selection {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.shell-selection h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.4em;
+}
+
+.shell-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+.shell-card {
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: var(--background);
+}
+
+.shell-card:hover {
+    border-color: var(--secondary-color);
+    box-shadow: var(--shadow-hover);
+    transform: translateY(-2px);
+}
+
+.shell-card.selected {
+    border-color: var(--secondary-color);
+    background: #e8f4fd;
+    box-shadow: var(--shadow-hover);
+}
+
+.shell-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.shell-header h4 {
+    color: var(--primary-color);
+    font-size: 1.2em;
+}
+
+.shell-type {
+    background: var(--secondary-color);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.8em;
+    font-weight: 500;
+}
+
+.shell-description p {
+    margin-bottom: 15px;
+    color: var(--text-light);
+}
+
+.shell-stats {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.stat .label {
+    font-size: 0.8em;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.stat .value {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.mandatory-layers, .optional-layers {
+    margin-bottom: 8px;
+    font-size: 0.9em;
+}
+
+.mandatory-layers strong {
+    color: var(--accent-color);
+}
+
+.optional-layers strong {
+    color: var(--secondary-color);
+}
+
+/* Layer Cards Styles */
+.layer-cards {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.layer-cards h3 {
+    color: var(--primary-color);
+    margin-bottom: 10px;
+    font-size: 1.4em;
+}
+
+.layer-instructions {
+    color: var(--text-light);
+    margin-bottom: 30px;
+    font-style: italic;
+}
+
+.layer-category {
+    margin-bottom: 30px;
+}
+
+.layer-title {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    padding-bottom: 8px;
+    border-bottom: 2px solid var(--border-color);
+    font-size: 1.1em;
+}
+
+.cards-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 15px;
+}
+
+.layer-card {
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    background: var(--background);
+    cursor: grab;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.layer-card:hover {
+    border-color: var(--secondary-color);
+    box-shadow: var(--shadow);
+    transform: translateY(-1px);
+}
+
+.layer-card:active {
+    cursor: grabbing;
+}
+
+.layer-card.used {
+    opacity: 0.5;
+    cursor: not-allowed;
+    background: #f8f9fa;
+}
+
+.layer-card.used:hover {
+    transform: none;
+    border-color: var(--border-color);
+    box-shadow: none;
+}
+
+.card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 10px;
+}
+
+.card-header h5 {
+    color: var(--primary-color);
+    font-size: 1em;
+    font-weight: 600;
+}
+
+.card-badges {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    align-items: flex-end;
+}
+
+.risk-badge, .slot-badge {
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 0.7em;
+    font-weight: 500;
+    color: white;
+}
+
+.risk-low { background: var(--success-color); }
+.risk-medium { background: var(--warning-color); }
+.risk-high { background: var(--accent-color); }
+
+.slot-badge {
+    background: var(--text-light);
+}
+
+.card-role {
+    color: var(--text-dark);
+    margin-bottom: 10px;
+    font-size: 0.9em;
+}
+
+.card-failure {
+    font-size: 0.8em;
+    color: var(--text-light);
+    border-top: 1px solid #dee2e6;
+    padding-top: 8px;
+}
+
+/* Weapon Builder Styles */
+.weapon-builder {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    min-height: 300px;
+}
+
+.weapon-builder h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.4em;
+}
+
+.weapon-display {
+    min-height: 250px;
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    padding: 20px;
+    background: var(--background);
+}
+
+.no-shell-message {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: var(--text-light);
+    font-style: italic;
+    text-align: center;
+}
+
+.weapon-shell {
+    background: white;
+    border: 2px solid var(--secondary-color);
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: var(--shadow);
+}
+
+.weapon-shell h4 {
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    font-size: 1.2em;
+}
+
+.shell-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 6px;
+}
+
+.info-item {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.info-label {
+    font-size: 0.8em;
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.info-value {
+    font-weight: 600;
+    color: var(--primary-color);
+}
+
+.layer-slots {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+}
+
+.slot-area {
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    padding: 15px;
+    min-height: 120px;
+    background: #f8f9fa;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.slot-area.drag-over {
+    border-color: var(--secondary-color);
+    background: #e8f4fd;
+}
+
+.slot-area.required {
+    border-color: var(--accent-color);
+}
+
+.slot-area.occupied {
+    border-style: solid;
+    border-color: var(--success-color);
+    background: #d5f4e6;
+}
+
+.slot-label {
+    font-weight: 500;
+    color: var(--primary-color);
+    margin-bottom: 8px;
+}
+
+.slot-hint {
+    color: var(--text-light);
+    font-size: 0.8em;
+    font-style: italic;
+}
+
+.installed-card {
+    background: white;
+    border: 1px solid var(--success-color);
+    border-radius: 6px;
+    padding: 12px;
+    position: relative;
+}
+
+.remove-card {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remove-card:hover {
+    background: #c0392b;
+}
+
+/* Weapon Summary Styles */
+.weapon-summary {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+}
+
+.weapon-summary h3 {
+    color: var(--primary-color);
+    margin-bottom: 20px;
+    font-size: 1.4em;
+}
+
+.weapon-stats.hidden {
+    display: none;
+}
+
+.summary-section {
+    margin-bottom: 25px;
+}
+
+.summary-section h4 {
+    color: var(--primary-color);
+    margin-bottom: 12px;
+    font-size: 1.1em;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 5px;
+}
+
+.stat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 15px;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: var(--background);
+    border-radius: 4px;
+}
+
+.stat-label {
+    color: var(--text-light);
+    font-weight: 500;
+}
+
+.stat-value {
+    color: var(--primary-color);
+    font-weight: 600;
+}
+
+.layer-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.layer-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    background: var(--background);
+    border-radius: 4px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.layer-name {
+    font-weight: 500;
+    color: var(--primary-color);
+}
+
+.layer-details {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.weapon-description {
+    background: var(--background);
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid var(--secondary-color);
+}
+
+.export-section {
+    display: flex;
+    gap: 15px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.export-btn, .clear-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.export-btn {
+    background: var(--secondary-color);
+    color: white;
+}
+
+.export-btn:hover {
+    background: #2980b9;
+}
+
+.clear-btn {
+    background: var(--accent-color);
+    color: white;
+}
+
+.clear-btn:hover {
+    background: #c0392b;
+}
+
+/* Responsive Design */
+@media (min-width: 768px) {
+    .builder-layout {
+        grid-template-columns: 1fr 1fr;
+        grid-template-areas: 
+            "shells shells"
+            "cards builder"
+            "summary summary";
+    }
+    
+    .shell-selection {
+        grid-area: shells;
+    }
+    
+    .layer-cards {
+        grid-area: cards;
+    }
+    
+    .weapon-builder {
+        grid-area: builder;
+    }
+    
+    .weapon-summary {
+        grid-area: summary;
+    }
+}
+
+@media (min-width: 1200px) {
+    .builder-layout {
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-template-areas: 
+            "shells shells shells"
+            "cards cards builder"
+            "summary summary summary";
+    }
+}
+
+/* Drag and Drop Visual States */
+.dragging {
+    opacity: 0.7;
+    transform: rotate(5deg);
+}
+
+.drop-zone-active {
+    border-color: var(--secondary-color) !important;
+    background-color: #e8f4fd !important;
+}
+
+.drop-zone-invalid {
+    border-color: var(--accent-color) !important;
+    background-color: #fdf2f2 !important;
+}
