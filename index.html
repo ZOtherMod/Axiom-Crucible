@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Axiom & Crucible - Tier-0 Weapon Builder</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="ui/enhanced-styles.css">
 </head>
 <body>
     <div class="container">
@@ -17,13 +16,244 @@
 
         <div class="builder-layout">
             <!-- Shell Selection -->
-            <section class="shell-selection" id="shell-selection">
-                <!-- Content will be dynamically generated -->
+            <section class="shell-selection">
+                <h3>1. Choose Your Weapon Shell</h3>
+                <div class="shell-grid">
+                    <div class="shell-card" data-shell="hand-tool">
+                        <div class="shell-header">
+                            <h4>Hand Tool</h4>
+                            <span class="shell-type">Weapon Shell A</span>
+                        </div>
+                        <div class="shell-description">
+                            <p>A manually operated weapon held by a person</p>
+                            <div class="shell-stats">
+                                <div class="stat">
+                                    <span class="label">Slots:</span>
+                                    <span class="value">2</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">Stress Limit:</span>
+                                    <span class="value">Low</span>
+                                </div>
+                            </div>
+                            <div class="mandatory-layers">
+                                <strong>Required:</strong> Structure, Power
+                            </div>
+                            <div class="optional-layers">
+                                <strong>Optional:</strong> Control, Safety
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shell-card" data-shell="static-device">
+                        <div class="shell-header">
+                            <h4>Static Device</h4>
+                            <span class="shell-type">Weapon Shell B</span>
+                        </div>
+                        <div class="shell-description">
+                            <p>A stationary weapon mechanism (trap, ballista)</p>
+                            <div class="shell-stats">
+                                <div class="stat">
+                                    <span class="label">Slots:</span>
+                                    <span class="value">3</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">Stress Limit:</span>
+                                    <span class="value">Moderate</span>
+                                </div>
+                            </div>
+                            <div class="mandatory-layers">
+                                <strong>Required:</strong> Structure, Power
+                            </div>
+                            <div class="optional-layers">
+                                <strong>Optional:</strong> Control, Sense, Safety
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="shell-card" data-shell="simple-automaton">
+                        <div class="shell-header">
+                            <h4>Simple Automaton</h4>
+                            <span class="shell-type">Weapon Shell C</span>
+                        </div>
+                        <div class="shell-description">
+                            <p>A slow, semi-autonomous weapon</p>
+                            <div class="shell-stats">
+                                <div class="stat">
+                                    <span class="label">Slots:</span>
+                                    <span class="value">3</span>
+                                </div>
+                                <div class="stat">
+                                    <span class="label">Stress Limit:</span>
+                                    <span class="value">Low</span>
+                                </div>
+                            </div>
+                            <div class="mandatory-layers">
+                                <strong>Required:</strong> Structure, Power, Control
+                            </div>
+                            <div class="optional-layers">
+                                <strong>Optional:</strong> Sense, Safety
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- Layer Card Pool -->
-            <section class="layer-cards" id="layer-cards">
-                <!-- Content will be dynamically generated -->
+            <section class="layer-cards">
+                <h3>2. Select Layer Cards</h3>
+                <p class="layer-instructions">Drag cards to your weapon slots below. Each layer can only be used once.</p>
+                
+                <div class="layer-category" data-layer="structure">
+                    <h4 class="layer-title">Structure Layer - "What holds this together?"</h4>
+                    <div class="cards-row">
+                        <div class="layer-card" data-card="basic-frame" data-layer="structure" data-slots="0" data-risk="low" draggable="true">
+                            <div class="card-header">
+                                <h5>Basic Frame</h5>
+                                <div class="card-badges">
+                                    <span class="risk-badge risk-low">Low Risk</span>
+                                    <span class="slot-badge">0 Slots</span>
+                                </div>
+                            </div>
+                            <p class="card-role">Holds all other layers together</p>
+                            <div class="card-failure">
+                                <strong>Failure:</strong> Device bends, cracks, or collapses
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layer-category" data-layer="power">
+                    <h4 class="layer-title">Power Layer - "What makes this do anything?"</h4>
+                    <div class="cards-row">
+                        <div class="layer-card" data-card="manual-drive" data-layer="power" data-slots="1" data-risk="low" draggable="true">
+                            <div class="card-header">
+                                <h5>Manual Drive</h5>
+                                <div class="card-badges">
+                                    <span class="risk-badge risk-low">Low Risk</span>
+                                    <span class="slot-badge">1 Slot</span>
+                                </div>
+                            </div>
+                            <p class="card-role">Converts your effort into motion or force</p>
+                            <div class="card-failure">
+                                <strong>Failure:</strong> Device locks up or kicks back
+                            </div>
+                        </div>
+
+                        <div class="layer-card" data-card="stored-motion" data-layer="power" data-slots="1" data-risk="medium" draggable="true">
+                            <div class="card-header">
+                                <h5>Stored Motion</h5>
+                                <div class="card-badges">
+                                    <span class="risk-badge risk-medium">Medium Risk</span>
+                                    <span class="slot-badge">1 Slot</span>
+                                </div>
+                            </div>
+                            <p class="card-role">Releases stored kinetic force</p>
+                            <div class="card-failure">
+                                <strong>Failure:</strong> Power releases all at once
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layer-category" data-layer="control">
+                    <h4 class="layer-title">Control Layer - "How does it decide what to do?"</h4>
+                    <div class="cards-row">
+                        <div class="layer-card" data-card="simple-trigger" data-layer="control" data-slots="1" data-risk="low" draggable="true">
+                            <div class="card-header">
+                                <h5>Simple Trigger</h5>
+                                <div class="card-badges">
+                                    <span class="risk-badge risk-low">Low Risk</span>
+                                    <span class="slot-badge">1 Slot</span>
+                                </div>
+                            </div>
+                            <p class="card-role">On/Off behavior based on one condition</p>
+                            <div class="card-failure">
+                                <strong>Failure:</strong> Trigger sticks or misfires
+                            </div>
+                        </div>
+
+                        <div class="layer-card" data-card="fixed-sequence" data-layer="control" data-slots="1" data-risk="medium" draggable="true">
+                            <div class="card-header">
+                                <h5>Fixed Sequence</h5>
+                                <div class="card-badges">
+                                    <span class="risk-badge risk-medium">Medium Risk</span>
+                                    <span class="slot-badge">1 Slot</span>
+                                </div>
+                            </div>
+                            <p class="card-role">Executes a set series of actions</p>
+                            <div class="card-failure">
+                                <strong>Failure:</strong> Steps occur out of order
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layer-category" data-layer="sense">
+                    <h4 class="layer-title">Sense Layer - "What can this detect?"</h4>
+                    <div class="cards-row">
+                        <div class="layer-card" data-card="physical-contact" data-layer="sense" data-slots="1" data-risk="low" draggable="true">
+                            <div class="card-header">
+                                <h5>Physical Contact</h5>
+                                <div class="card-badges">
+                                    <span class="risk-badge risk-low">Low Risk</span>
+                                    <span class="slot-badge">1 Slot</span>
+                                </div>
+                            </div>
+                            <p class="card-role">Detects direct contact</p>
+                            <div class="card-failure">
+                                <strong>Failure:</strong> Missed contact or false signals
+                            </div>
+                        </div>
+
+                        <div class="layer-card" data-card="stress-motion" data-layer="sense" data-slots="1" data-risk="medium" draggable="true">
+                            <div class="card-header">
+                                <h5>Stress & Motion</h5>
+                                <div class="card-badges">
+                                    <span class="risk-badge risk-medium">Medium Risk</span>
+                                    <span class="slot-badge">1 Slot</span>
+                                </div>
+                            </div>
+                            <p class="card-role">Detects sustained force or motion</p>
+                            <div class="card-failure">
+                                <strong>Failure:</strong> Overreaction or total silence
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="layer-category" data-layer="safety">
+                    <h4 class="layer-title">Safety Layer - "What prevents disaster?"</h4>
+                    <div class="cards-row">
+                        <div class="layer-card" data-card="emergency-release" data-layer="safety" data-slots="1" data-risk="low" draggable="true">
+                            <div class="card-header">
+                                <h5>Emergency Release</h5>
+                                <div class="card-badges">
+                                    <span class="risk-badge risk-low">Low Risk</span>
+                                    <span class="slot-badge">1 Slot</span>
+                                </div>
+                            </div>
+                            <p class="card-role">Reduces damage when something goes wrong</p>
+                            <div class="card-failure">
+                                <strong>Failure:</strong> Release jams or works partially
+                            </div>
+                        </div>
+
+                        <div class="layer-card" data-card="shock-dampening" data-layer="safety" data-slots="1" data-risk="low" draggable="true">
+                            <div class="card-header">
+                                <h5>Shock Dampening</h5>
+                                <div class="card-badges">
+                                    <span class="risk-badge risk-low">Low Risk</span>
+                                    <span class="slot-badge">1 Slot</span>
+                                </div>
+                            </div>
+                            <p class="card-role">Absorbs violent force</p>
+                            <div class="card-failure">
+                                <strong>Failure:</strong> Protection degrades or stops
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <!-- Weapon Builder Area -->
@@ -37,19 +267,47 @@
             </section>
 
             <!-- Weapon Summary -->
-            <section class="weapon-summary" id="weapon-summary">
-                <!-- Content will be dynamically generated -->
+            <section class="weapon-summary">
+                <h3>Weapon Summary</h3>
+                <div id="weapon-stats" class="weapon-stats hidden">
+                    <div class="summary-section">
+                        <h4>Configuration</h4>
+                        <div class="stat-grid">
+                            <div class="stat-item">
+                                <span class="stat-label">Shell Type:</span>
+                                <span class="stat-value" id="summary-shell">None</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Slots Used:</span>
+                                <span class="stat-value" id="summary-slots">0/0</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-label">Total Risk:</span>
+                                <span class="stat-value" id="summary-risk">None</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="summary-section">
+                        <h4>Installed Layers</h4>
+                        <div id="summary-layers" class="layer-list">
+                            <p class="no-layers">No layers installed</p>
+                        </div>
+                    </div>
+                    <div class="summary-section">
+                        <h4>Description</h4>
+                        <div id="weapon-description" class="weapon-description">
+                            <p>Build your weapon to see its description</p>
+                        </div>
+                    </div>
+                    <div class="export-section">
+                        <button id="export-weapon" class="export-btn">Export Weapon</button>
+                        <button id="clear-weapon" class="clear-btn">Clear Build</button>
+                    </div>
+                </div>
             </section>
         </div>
     </div>
 
-    <!-- Load scripts in dependency order -->
-    <script src="data/gameData.js"></script>
-    <script src="core/engine.js"></script>
-    <script src="ui/uiManager.js"></script>
-    <script src="ui/components.js"></script>
-    <script src="ui/additionalComponents.js"></script>
-    <script src="modules/weaponBuilder.js"></script>
-    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
