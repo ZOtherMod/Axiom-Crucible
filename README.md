@@ -2,6 +2,16 @@
 
 A modular drag-and-drop weapon builder for the Axiom & Crucible tabletop RPG system. This tool helps players create Tier-0 weapons by selecting shells and combining layer cards according to the game's engineering mechanics.
 
+## 🚀 **Live Demo**
+**Try it now:** https://zothermod.github.io/Axiom-Crucible/
+
+## ✨ **Features**
+- **Modular Architecture**: Easily expandable for future game mechanics
+- **Drag & Drop Interface**: Intuitive weapon building experience  
+- **Real-time Validation**: Automatic compatibility and rule checking
+- **Responsive Design**: Works on desktop, tablet, and mobile
+- **Export System**: Save and share weapon designs
+
 ## Features
 
 - **Shell Selection**: Choose from three different weapon shell types (Hand Tool, Static Device, Simple Automaton)
