@@ -211,26 +211,34 @@ function addInstability() {
 }
 
 function importWeaponConfig() {
+    console.log('Import weapon config called');
+    
     // Try to get weapon data from localStorage (saved from weapon selection tool)
     const weaponData = localStorage.getItem('axiom-crucible-weapon');
+    
+    console.log('Weapon data from localStorage:', weaponData);
     
     if (weaponData) {
         try {
             const weapon = JSON.parse(weaponData);
+            console.log('Parsed weapon data:', weapon);
             
             // Populate weapon fields
             document.getElementById('weapon-platform').value = weapon.platform?.name || '';
             document.getElementById('platform-features').value = 
-                weapon.platform?.features?.join('\n') || '';
+                weapon.platform?.features?.join('\n') || weapon.platform?.description || '';
             
             document.getElementById('weapon-module').value = weapon.module?.name || '';
-            document.getElementById('module-effect').value = weapon.module?.effect || '';
+            document.getElementById('module-effect').value = weapon.module?.effect || weapon.module?.description || '';
             
             showNotification('Weapon configuration imported successfully!');
+            console.log('Weapon imported successfully');
         } catch (error) {
+            console.error('Error parsing weapon data:', error);
             showNotification('Error importing weapon configuration.');
         }
     } else {
+        console.log('No weapon data found in localStorage');
         showNotification('No weapon configuration found. Please use the Weapon Selection tool first.');
     }
 }

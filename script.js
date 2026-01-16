@@ -80,8 +80,38 @@ const weaponData = {
 // Initialize the application
 document.addEventListener('DOMContentLoaded', function() {
     initializeEventListeners();
+    restoreSelectionFromLocalStorage(); // Restore previous selection
     updateModuleAvailability();
 });
+
+// Restore weapon selection from localStorage
+function restoreSelectionFromLocalStorage() {
+    const weaponData = localStorage.getItem('axiom-crucible-weapon');
+    if (weaponData) {
+        try {
+            const weapon = JSON.parse(weaponData);
+            if (weapon.platform && weapon.platform.id) {
+                selectedPlatform = weapon.platform.id;
+                const platformCard = document.querySelector(`[data-id="${selectedPlatform}"]`);
+                if (platformCard) {
+                    platformCard.classList.add('selected');
+                    updatePlatformDisplay();
+                }
+            }
+            if (weapon.module && weapon.module.id) {
+                selectedModule = weapon.module.id;
+                const moduleCard = document.querySelector(`[data-id="${selectedModule}"]`);
+                if (moduleCard) {
+                    moduleCard.classList.add('selected');
+                    updateModuleDisplay();
+                }
+            }
+            updateExportButton();
+        } catch (error) {
+            console.log('Could not restore weapon selection:', error);
+        }
+    }
+}
 
 function initializeEventListeners() {
     // Platform selection
@@ -115,6 +145,9 @@ function selectPlatform(platformId) {
     updatePlatformDisplay();
     updateModuleAvailability();
     updateExportButton();
+    
+    // Auto-save selection for persistence
+    autoSaveSelection();
 }
 
 function selectModule(moduleId) {
@@ -129,6 +162,33 @@ function selectModule(moduleId) {
     selectedModule = moduleId;
     updateModuleDisplay();
     updateExportButton();
+    
+    // Auto-save selection for persistence
+    autoSaveSelection();
+}
+
+// Auto-save current selection to localStorage
+function autoSaveSelection() {
+    if (selectedPlatform && selectedModule) {
+        const platform = weaponData.platforms[selectedPlatform];
+        const module = weaponData.modules[selectedModule];
+        
+        const buildData = {
+            platform: {
+                id: selectedPlatform,
+                ...platform
+            },
+            module: {
+                id: selectedModule,
+                ...module
+            },
+            exportDate: new Date().toISOString(),
+            gameSystem: "Axiom & Crucible",
+            tier: "Tier 0"
+        };
+        
+        localStorage.setItem('axiom-crucible-weapon', JSON.stringify(buildData));
+    }
 }
 
 function updatePlatformDisplay() {
