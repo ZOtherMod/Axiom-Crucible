@@ -1509,6 +1509,30 @@ button:disabled, .btn:disabled {
     text-transform: uppercase !important;
 }
 
+/* Universal stat input override - highest specificity for all platforms */
+html body .character-sheet .sheet-section .stat-block input[type="number"],
+html body .character-sheet .sheet-section .stat-block input,
+html body .character-sheet .stats-section .stat-block input[type="number"],
+html body .character-sheet .stats-section .stat-block input,
+body.character-sheet-page .stat-block input {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 2px solid #00d4ff !important;
+    border-radius: 8px !important;
+    width: 60px !important;
+    height: 32px !important;
+    text-align: center !important;
+    color: #fff !important;
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.25rem !important;
+    padding: 0.2rem !important;
+    -webkit-border-radius: 8px !important;
+    -moz-border-radius: 8px !important;
+    -webkit-appearance: none !important;
+    -moz-appearance: textfield !important;
+    appearance: none !important;
+}
+
 .stat-block input {
     background: rgba(255, 255, 255, 0.1) !important;
     border: 2px solid #00d4ff !important;
@@ -1926,8 +1950,26 @@ button:disabled, .btn:disabled {
     }
 }
 
-/* Windows-specific fixes */
+/* Windows-specific fixes with higher specificity */
 @supports (-ms-ime-align: auto) {
+    .character-sheet .stat-block input[type="number"],
+    .character-sheet .stat-block input {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 2px solid #00d4ff !important;
+        border-radius: 8px !important;
+        width: 60px !important;
+        height: 32px !important;
+        text-align: center !important;
+        color: #fff !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 0.25rem !important;
+        padding: 0.2rem !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+        appearance: none !important;
+    }
+    
     .sheet-row {
         display: -ms-flexbox !important;
         display: flex !important;
@@ -1954,7 +1996,19 @@ button:disabled, .btn:disabled {
 
 /* Edge Legacy support */
 @supports (-ms-accelerator: true) {
-    input[type="checkbox"] {
+    body .character-sheet .stat-block input,
+    body .character-sheet .stat-block input[type="number"] {
+        background: rgba(255, 255, 255, 0.1) !important;
+        border: 2px solid #00d4ff !important;
+        border-radius: 8px !important;
+        width: 60px !important;
+        height: 32px !important;
+        text-align: center !important;
+        color: #fff !important;
+        font-size: 1.1rem !important;
+        font-weight: 700 !important;
+        margin-bottom: 0.25rem !important;
+        padding: 0.2rem !important;
         -ms-appearance: none;
         appearance: none;
     }
