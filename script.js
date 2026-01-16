@@ -1,550 +1,377 @@
-// Axiom & Crucible - Weapon Builder JavaScript
+// Global state for weapon selection
+let selectedPlatform = null;
+let selectedModule = null;
 
-class WeaponBuilder {
-    constructor() {
-        this.selectedShell = null;
-        this.installedLayers = {};
-        this.shellData = {
-            'hand-tool': {
-                name: 'Hand Tool',
-                slots: 2,
-                stressLimit: 'Low',
-                mandatory: ['structure', 'power'],
-                optional: ['control', 'safety'],
-                specialRule: 'If Stress exceeds limit, the operator suffers consequences.'
-            },
-            'static-device': {
-                name: 'Static Device',
-                slots: 3,
-                stressLimit: 'Moderate',
-                mandatory: ['structure', 'power'],
-                optional: ['control', 'sense', 'safety'],
-                specialRule: 'Stationary weapon mechanism.'
-            },
-            'simple-automaton': {
-                name: 'Simple Automaton',
-                slots: 3,
-                stressLimit: 'Low',
-                mandatory: ['structure', 'power', 'control'],
-                optional: ['sense', 'safety'],
-                specialRule: 'Control failures cause erratic behavior.'
-            }
-        };
-
-        this.cardData = {
-            'basic-frame': {
-                name: 'Basic Frame',
-                layer: 'structure',
-                role: 'Holds all other layers together',
-                slots: 0,
-                risk: 'low',
-                failure: 'The device bends, cracks, or collapses'
-            },
-            'manual-drive': {
-                name: 'Manual Drive',
-                layer: 'power',
-                role: 'Converts your effort into motion or force',
-                slots: 1,
-                risk: 'low',
-                failure: 'The device locks up or kicks back'
-            },
-            'stored-motion': {
-                name: 'Stored Motion',
-                layer: 'power',
-                role: 'Releases stored kinetic force',
-                slots: 1,
-                risk: 'medium',
-                failure: 'Power releases all at once'
-            },
-            'simple-trigger': {
-                name: 'Simple Trigger',
-                layer: 'control',
-                role: 'On/Off behavior based on one condition',
-                slots: 1,
-                risk: 'low',
-                failure: 'The trigger sticks or misfires'
-            },
-            'fixed-sequence': {
-                name: 'Fixed Sequence',
-                layer: 'control',
-                role: 'Executes a set series of actions',
-                slots: 1,
-                risk: 'medium',
-                failure: 'Steps occur out of order'
-            },
-            'physical-contact': {
-                name: 'Physical Contact',
-                layer: 'sense',
-                role: 'Detects direct contact',
-                slots: 1,
-                risk: 'low',
-                failure: 'Missed contact or false signals'
-            },
-            'stress-motion': {
-                name: 'Stress & Motion',
-                layer: 'sense',
-                role: 'Detects sustained force or motion',
-                slots: 1,
-                risk: 'medium',
-                failure: 'Overreaction or total silence'
-            },
-            'emergency-release': {
-                name: 'Emergency Release',
-                layer: 'safety',
-                role: 'Reduces damage when something goes wrong',
-                slots: 1,
-                risk: 'low',
-                failure: 'The release jams or works partially'
-            },
-            'shock-dampening': {
-                name: 'Shock Dampening',
-                layer: 'safety',
-                role: 'Absorbs violent force',
-                slots: 1,
-                risk: 'low',
-                failure: 'Protection degrades or stops working'
-            }
-        };
-
-        this.init();
-    }
-
-    init() {
-        this.bindEvents();
-        this.updateDisplay();
-    }
-
-    bindEvents() {
-        // Shell selection
-        document.querySelectorAll('.shell-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                const shellType = e.currentTarget.dataset.shell;
-                this.selectShell(shellType);
-            });
-        });
-
-        // Drag and drop for layer cards
-        document.querySelectorAll('.layer-card').forEach(card => {
-            card.addEventListener('dragstart', this.handleDragStart.bind(this));
-            card.addEventListener('dragend', this.handleDragEnd.bind(this));
-        });
-
-        // Export and clear buttons
-        document.getElementById('export-weapon').addEventListener('click', this.exportWeapon.bind(this));
-        document.getElementById('clear-weapon').addEventListener('click', this.clearWeapon.bind(this));
-    }
-
-    selectShell(shellType) {
-        // Remove previous selection
-        document.querySelectorAll('.shell-card').forEach(card => {
-            card.classList.remove('selected');
-        });
-
-        // Select new shell
-        document.querySelector(`[data-shell="${shellType}"]`).classList.add('selected');
-        this.selectedShell = shellType;
-
-        // Clear installed layers when changing shells
-        this.installedLayers = {};
-        this.markAllCardsAvailable();
-
-        this.renderWeaponDisplay();
-        this.updateSummary();
-    }
-
-    renderWeaponDisplay() {
-        const weaponDisplay = document.getElementById('weapon-display');
-        
-        if (!this.selectedShell) {
-            weaponDisplay.innerHTML = `
-                <div class="no-shell-message">
-                    <p>Select a shell above to begin building your weapon</p>
-                </div>
-            `;
-            return;
+// Weapon data structure
+const weaponData = {
+    platforms: {
+        ranged: {
+            name: "Ranged Platform",
+            range: "Medium",
+            role: "Safe pressure, positioning, sustained fire",
+            features: [
+                "Attacks against Engaged targets: +2 Difficulty",
+                "Cannot Critically Succeed against Engaged targets",
+                "Move + Attack in same turn: +1 Difficulty"
+            ]
+        },
+        melee: {
+            name: "Melee Platform",
+            range: "Engaged",
+            role: "Control, disruption, decisive engagement",
+            features: [
+                "Close Control: On Clean Success, modify target Instability by ±1",
+                "Opportunity Pressure: Free attack at +2 Difficulty on disengagement"
+            ]
         }
+    },
+    modules: {
+        stability: {
+            name: "Stability Module",
+            flavor: "We don't spike. We converge.",
+            effect: "Replace d20 with 2d10 for attack rolls",
+            category: "universal"
+        },
+        calibration: {
+            name: "Calibration Module",
+            flavor: "Every miss tells us something.",
+            effect: "On Partial Failure, reduce next attack Difficulty by 1 (stacking). Resets on successful hit.",
+            category: "universal"
+        },
+        "heat-sink": {
+            name: "Heat Sink Module",
+            flavor: "The system bleeds pressure.",
+            effect: "Once per round, reduce Instability gained by 1 (minimum 0)",
+            category: "universal"
+        },
+        "safety-interlock": {
+            name: "Safety Interlock",
+            flavor: "The system refuses to die.",
+            effect: "Once per scene, downgrade Hard Failure to Partial Failure",
+            category: "universal"
+        },
+        "targeting-gyroscope": {
+            name: "Targeting Gyroscope",
+            flavor: "Hold still. Or don't.",
+            effect: "Ignore the +1 Difficulty penalty for moving and attacking in the same turn",
+            category: "ranged"
+        },
+        "focus-lens": {
+            name: "Focus Lens",
+            flavor: "Depth over force.",
+            effect: "On Critical Success, increase Severity by 1 tier (max Severe). Cannot increase Severity on Partial Failures.",
+            category: "ranged"
+        },
+        "momentum-actuator": {
+            name: "Momentum Actuator",
+            flavor: "Once contact is made, it doesn't stop.",
+            effect: "On hit, gain 1 Momentum. Spend Momentum to reduce next attack Difficulty by 1 or add +1 Strain to target. Momentum clears if you miss or disengage.",
+            category: "melee"
+        },
+        "force-lock-servo": {
+            name: "Force-Lock Servo",
+            flavor: "They don't get to choose anymore.",
+            effect: "On Clean Success, target cannot disengage next turn without spending an action",
+            category: "melee"
+        }
+    }
+};
 
-        const shell = this.shellData[this.selectedShell];
-        const allLayers = [...shell.mandatory, ...shell.optional];
-        
-        weaponDisplay.innerHTML = `
-            <div class="weapon-shell">
-                <h4>${shell.name} Configuration</h4>
-                <div class="shell-info">
-                    <div class="info-item">
-                        <span class="info-label">Shell Type:</span>
-                        <span class="info-value">${shell.name}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Slot Capacity:</span>
-                        <span class="info-value">${this.getUsedSlots()}/${shell.slots}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Stress Limit:</span>
-                        <span class="info-value">${shell.stressLimit}</span>
-                    </div>
-                    <div class="info-item">
-                        <span class="info-label">Status:</span>
-                        <span class="info-value">${this.getWeaponStatus()}</span>
-                    </div>
-                </div>
-                <div class="layer-slots">
-                    ${allLayers.map(layer => this.renderLayerSlot(layer)).join('')}
-                </div>
+// Initialize the application
+document.addEventListener('DOMContentLoaded', function() {
+    initializeEventListeners();
+    updateModuleAvailability();
+});
+
+function initializeEventListeners() {
+    // Platform selection
+    document.querySelectorAll('[data-type="platform"]').forEach(card => {
+        card.addEventListener('click', () => selectPlatform(card.dataset.id));
+    });
+
+    // Module selection
+    document.querySelectorAll('[data-type="module"]').forEach(card => {
+        card.addEventListener('click', () => {
+            if (!card.classList.contains('disabled')) {
+                selectModule(card.dataset.id);
+            }
+        });
+    });
+
+    // Export button
+    document.getElementById('export-build').addEventListener('click', exportBuild);
+}
+
+function selectPlatform(platformId) {
+    // Remove previous selection
+    document.querySelectorAll('[data-type="platform"]').forEach(card => {
+        card.classList.remove('selected');
+    });
+
+    // Add selection to clicked card
+    document.querySelector(`[data-id="${platformId}"]`).classList.add('selected');
+    
+    selectedPlatform = platformId;
+    updatePlatformDisplay();
+    updateModuleAvailability();
+    updateExportButton();
+}
+
+function selectModule(moduleId) {
+    // Remove previous selection
+    document.querySelectorAll('[data-type="module"]').forEach(card => {
+        card.classList.remove('selected');
+    });
+
+    // Add selection to clicked card
+    document.querySelector(`[data-id="${moduleId}"]`).classList.add('selected');
+    
+    selectedModule = moduleId;
+    updateModuleDisplay();
+    updateExportButton();
+}
+
+function updatePlatformDisplay() {
+    const display = document.getElementById('platform-display');
+    
+    if (selectedPlatform) {
+        const platform = weaponData.platforms[selectedPlatform];
+        display.innerHTML = `
+            <h4>${platform.name}</h4>
+            <p><strong>Range:</strong> ${platform.range}</p>
+            <p><strong>Role:</strong> ${platform.role}</p>
+            <div class="features">
+                <strong>Features:</strong>
+                <ul>
+                    ${platform.features.map(feature => `<li>${feature}</li>`).join('')}
+                </ul>
             </div>
         `;
-
-        // Add drop event listeners
-        document.querySelectorAll('.slot-area').forEach(slot => {
-            slot.addEventListener('dragover', this.handleDragOver.bind(this));
-            slot.addEventListener('drop', this.handleDrop.bind(this));
-            slot.addEventListener('dragenter', this.handleDragEnter.bind(this));
-            slot.addEventListener('dragleave', this.handleDragLeave.bind(this));
-        });
-
-        // Add remove button listeners
-        document.querySelectorAll('.remove-card').forEach(btn => {
-            btn.addEventListener('click', this.handleRemoveCard.bind(this));
-        });
-    }
-
-    renderLayerSlot(layerType) {
-        const shell = this.shellData[this.selectedShell];
-        const isRequired = shell.mandatory.includes(layerType);
-        const installedCard = this.installedLayers[layerType];
-        
-        let slotClass = 'slot-area';
-        if (isRequired) slotClass += ' required';
-        if (installedCard) slotClass += ' occupied';
-
-        let content = `
-            <div class="slot-label">
-                ${this.capitalizeFirst(layerType)} Layer
-                ${isRequired ? ' (Required)' : ' (Optional)'}
-            </div>
-        `;
-
-        if (installedCard) {
-            const cardInfo = this.cardData[installedCard];
-            content += `
-                <div class="installed-card">
-                    <button class="remove-card" data-layer="${layerType}">×</button>
-                    <div class="card-header">
-                        <h5>${cardInfo.name}</h5>
-                        <div class="card-badges">
-                            <span class="risk-badge risk-${cardInfo.risk}">${this.capitalizeFirst(cardInfo.risk)} Risk</span>
-                            <span class="slot-badge">${cardInfo.slots} Slots</span>
-                        </div>
-                    </div>
-                    <p class="card-role">${cardInfo.role}</p>
-                </div>
-            `;
-        } else {
-            content += `
-                <div class="slot-hint">
-                    Drop a ${layerType} layer card here
-                </div>
-            `;
-        }
-
-        return `<div class="${slotClass}" data-layer="${layerType}">${content}</div>`;
-    }
-
-    handleDragStart(e) {
-        const card = e.target.closest('.layer-card');
-        if (card.classList.contains('used')) {
-            e.preventDefault();
-            return;
-        }
-
-        card.classList.add('dragging');
-        e.dataTransfer.setData('text/plain', card.dataset.card);
-        e.dataTransfer.effectAllowed = 'move';
-    }
-
-    handleDragEnd(e) {
-        e.target.classList.remove('dragging');
-        document.querySelectorAll('.slot-area').forEach(slot => {
-            slot.classList.remove('drag-over', 'drop-zone-active', 'drop-zone-invalid');
-        });
-    }
-
-    handleDragOver(e) {
-        e.preventDefault();
-        e.dataTransfer.dropEffect = 'move';
-    }
-
-    handleDragEnter(e) {
-        e.preventDefault();
-        const slot = e.target.closest('.slot-area');
-        if (slot && !slot.classList.contains('occupied')) {
-            slot.classList.add('drop-zone-active');
-        }
-    }
-
-    handleDragLeave(e) {
-        const slot = e.target.closest('.slot-area');
-        if (slot && !slot.contains(e.relatedTarget)) {
-            slot.classList.remove('drop-zone-active', 'drop-zone-invalid');
-        }
-    }
-
-    handleDrop(e) {
-        e.preventDefault();
-        const slot = e.target.closest('.slot-area');
-        const cardId = e.dataTransfer.getData('text/plain');
-        const card = this.cardData[cardId];
-        const layerType = slot.dataset.layer;
-
-        // Remove visual feedback
-        slot.classList.remove('drop-zone-active', 'drop-zone-invalid');
-
-        // Check if this is a valid drop
-        if (card.layer !== layerType || this.installedLayers[layerType]) {
-            return;
-        }
-
-        // Check if we have enough slots
-        if (this.getUsedSlots() + card.slots > this.shellData[this.selectedShell].slots) {
-            alert(`Not enough slots! This card requires ${card.slots} slots, but you only have ${this.shellData[this.selectedShell].slots - this.getUsedSlots()} slots remaining.`);
-            return;
-        }
-
-        // Install the card
-        this.installCard(layerType, cardId);
-    }
-
-    handleRemoveCard(e) {
-        e.preventDefault();
-        e.stopPropagation();
-        const layerType = e.target.dataset.layer;
-        this.removeCard(layerType);
-    }
-
-    installCard(layerType, cardId) {
-        this.installedLayers[layerType] = cardId;
-        
-        // Mark card as used
-        const cardElement = document.querySelector(`[data-card="${cardId}"]`);
-        cardElement.classList.add('used');
-        cardElement.draggable = false;
-
-        this.renderWeaponDisplay();
-        this.updateSummary();
-    }
-
-    removeCard(layerType) {
-        const cardId = this.installedLayers[layerType];
-        delete this.installedLayers[layerType];
-
-        // Mark card as available
-        const cardElement = document.querySelector(`[data-card="${cardId}"]`);
-        cardElement.classList.remove('used');
-        cardElement.draggable = true;
-
-        this.renderWeaponDisplay();
-        this.updateSummary();
-    }
-
-    getUsedSlots() {
-        return Object.values(this.installedLayers).reduce((total, cardId) => {
-            return total + this.cardData[cardId].slots;
-        }, 0);
-    }
-
-    getWeaponStatus() {
-        if (!this.selectedShell) return 'No shell selected';
-        
-        const shell = this.shellData[this.selectedShell];
-        const installedLayerTypes = Object.keys(this.installedLayers);
-        const missingRequired = shell.mandatory.filter(layer => !installedLayerTypes.includes(layer));
-        
-        if (missingRequired.length > 0) {
-            return `Missing: ${missingRequired.map(this.capitalizeFirst).join(', ')}`;
-        }
-        
-        return 'Complete';
-    }
-
-    getTotalRisk() {
-        const risks = Object.values(this.installedLayers).map(cardId => this.cardData[cardId].risk);
-        const riskCounts = { low: 0, medium: 0, high: 0 };
-        
-        risks.forEach(risk => riskCounts[risk]++);
-        
-        if (riskCounts.high > 0) return 'High';
-        if (riskCounts.medium > 0) return 'Medium';
-        if (riskCounts.low > 0) return 'Low';
-        return 'None';
-    }
-
-    generateWeaponDescription() {
-        if (!this.selectedShell || Object.keys(this.installedLayers).length === 0) {
-            return 'Build your weapon to see its description';
-        }
-
-        const shell = this.shellData[this.selectedShell];
-        const installedCards = Object.entries(this.installedLayers).map(([layer, cardId]) => {
-            const card = this.cardData[cardId];
-            return { layer, card };
-        });
-
-        let description = `This ${shell.name.toLowerCase()} `;
-        
-        // Describe structure
-        const structure = installedCards.find(item => item.layer === 'structure');
-        if (structure) {
-            description += `uses a ${structure.card.name.toLowerCase()} that ${structure.card.role.toLowerCase()}. `;
-        }
-
-        // Describe power
-        const power = installedCards.find(item => item.layer === 'power');
-        if (power) {
-            description += `It is powered by ${power.card.name.toLowerCase()} which ${power.card.role.toLowerCase()}. `;
-        }
-
-        // Describe control
-        const control = installedCards.find(item => item.layer === 'control');
-        if (control) {
-            description += `Control is handled by ${control.card.name.toLowerCase()} that ${control.card.role.toLowerCase()}. `;
-        }
-
-        // Describe sensing
-        const sense = installedCards.find(item => item.layer === 'sense');
-        if (sense) {
-            description += `It can detect threats using ${sense.card.name.toLowerCase()} which ${sense.card.role.toLowerCase()}. `;
-        }
-
-        // Describe safety
-        const safety = installedCards.find(item => item.layer === 'safety');
-        if (safety) {
-            description += `Safety is provided by ${safety.card.name.toLowerCase()} that ${safety.card.role.toLowerCase()}. `;
-        }
-
-        // Add special rule
-        if (shell.specialRule) {
-            description += `\n\nSpecial Rule: ${shell.specialRule}`;
-        }
-
-        // Add failure warnings
-        const failures = installedCards.map(item => `${item.card.name}: ${item.card.failure}`);
-        if (failures.length > 0) {
-            description += `\n\nPotential Failures:\n• ${failures.join('\n• ')}`;
-        }
-
-        return description;
-    }
-
-    updateSummary() {
-        const summaryElement = document.getElementById('weapon-stats');
-        
-        if (!this.selectedShell) {
-            summaryElement.classList.add('hidden');
-            return;
-        }
-
-        summaryElement.classList.remove('hidden');
-        
-        // Update basic stats
-        const shell = this.shellData[this.selectedShell];
-        document.getElementById('summary-shell').textContent = shell.name;
-        document.getElementById('summary-slots').textContent = `${this.getUsedSlots()}/${shell.slots}`;
-        document.getElementById('summary-risk').textContent = this.getTotalRisk();
-
-        // Update installed layers
-        const layersList = document.getElementById('summary-layers');
-        const installedEntries = Object.entries(this.installedLayers);
-        
-        if (installedEntries.length === 0) {
-            layersList.innerHTML = '<p class="no-layers">No layers installed</p>';
-        } else {
-            layersList.innerHTML = installedEntries.map(([layer, cardId]) => {
-                const card = this.cardData[cardId];
-                return `
-                    <div class="layer-item">
-                        <span class="layer-name">${this.capitalizeFirst(layer)}: ${card.name}</span>
-                        <div class="layer-details">
-                            <span class="risk-badge risk-${card.risk}">${this.capitalizeFirst(card.risk)}</span>
-                            <span class="slot-badge">${card.slots} slots</span>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-
-        // Update description
-        document.getElementById('weapon-description').innerHTML = 
-            `<p>${this.generateWeaponDescription().replace(/\n\n/g, '</p><p>').replace(/\n/g, '<br>')}</p>`;
-    }
-
-    updateDisplay() {
-        this.renderWeaponDisplay();
-        this.updateSummary();
-    }
-
-    exportWeapon() {
-        if (!this.selectedShell) {
-            alert('Please select a shell first!');
-            return;
-        }
-
-        const shell = this.shellData[this.selectedShell];
-        const weaponData = {
-            shell: this.selectedShell,
-            shellName: shell.name,
-            layers: this.installedLayers,
-            stats: {
-                slotsUsed: this.getUsedSlots(),
-                totalSlots: shell.slots,
-                risk: this.getTotalRisk(),
-                status: this.getWeaponStatus()
-            },
-            description: this.generateWeaponDescription()
-        };
-
-        const dataStr = JSON.stringify(weaponData, null, 2);
-        const dataBlob = new Blob([dataStr], { type: 'application/json' });
-        const url = URL.createObjectURL(dataBlob);
-        
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = `${shell.name.replace(/\s+/g, '_')}_weapon.json`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(url);
-    }
-
-    clearWeapon() {
-        if (confirm('Are you sure you want to clear your weapon design?')) {
-            this.selectedShell = null;
-            this.installedLayers = {};
-            
-            // Reset shell selection
-            document.querySelectorAll('.shell-card').forEach(card => {
-                card.classList.remove('selected');
-            });
-            
-            // Reset all cards
-            this.markAllCardsAvailable();
-            
-            this.updateDisplay();
-        }
-    }
-
-    markAllCardsAvailable() {
-        document.querySelectorAll('.layer-card').forEach(card => {
-            card.classList.remove('used');
-            card.draggable = true;
-        });
-    }
-
-    capitalizeFirst(str) {
-        return str.charAt(0).toUpperCase() + str.slice(1);
+    } else {
+        display.innerHTML = '<p class="placeholder">Select a platform above</p>';
     }
 }
 
-// Initialize the weapon builder when the DOM is loaded
-document.addEventListener('DOMContentLoaded', () => {
-    new WeaponBuilder();
+function updateModuleDisplay() {
+    const display = document.getElementById('module-display');
+    
+    if (selectedModule) {
+        const module = weaponData.modules[selectedModule];
+        display.innerHTML = `
+            <h4>${module.name}</h4>
+            <p class="flavor">"${module.flavor}"</p>
+            <p><strong>Effect:</strong> ${module.effect}</p>
+            <p><strong>Category:</strong> ${module.category.charAt(0).toUpperCase() + module.category.slice(1)}</p>
+        `;
+    } else {
+        display.innerHTML = '<p class="placeholder">Select a module above</p>';
+    }
+}
+
+function updateModuleAvailability() {
+    // Show/hide platform-specific modules
+    const rangedModules = document.getElementById('ranged-modules');
+    const meleeModules = document.getElementById('melee-modules');
+    
+    if (selectedPlatform === 'ranged') {
+        rangedModules.style.display = 'block';
+        meleeModules.style.display = 'none';
+        // Disable melee modules
+        document.querySelectorAll('[data-category="melee"]').forEach(card => {
+            card.classList.add('disabled');
+        });
+        document.querySelectorAll('[data-category="ranged"]').forEach(card => {
+            card.classList.remove('disabled');
+        });
+    } else if (selectedPlatform === 'melee') {
+        rangedModules.style.display = 'none';
+        meleeModules.style.display = 'block';
+        // Disable ranged modules
+        document.querySelectorAll('[data-category="ranged"]').forEach(card => {
+            card.classList.add('disabled');
+        });
+        document.querySelectorAll('[data-category="melee"]').forEach(card => {
+            card.classList.remove('disabled');
+        });
+    } else {
+        rangedModules.style.display = 'none';
+        meleeModules.style.display = 'none';
+        // Disable all platform-specific modules
+        document.querySelectorAll('[data-category="ranged"], [data-category="melee"]').forEach(card => {
+            card.classList.add('disabled');
+        });
+    }
+
+    // Clear module selection if it's no longer valid
+    if (selectedModule) {
+        const moduleCard = document.querySelector(`[data-id="${selectedModule}"]`);
+        if (moduleCard && moduleCard.classList.contains('disabled')) {
+            moduleCard.classList.remove('selected');
+            selectedModule = null;
+            updateModuleDisplay();
+            updateExportButton();
+        }
+    }
+}
+
+function updateExportButton() {
+    const exportButton = document.getElementById('export-build');
+    exportButton.disabled = !(selectedPlatform && selectedModule);
+}
+
+function exportBuild() {
+    if (!selectedPlatform || !selectedModule) {
+        alert('Please select both a platform and a module before exporting.');
+        return;
+    }
+
+    const platform = weaponData.platforms[selectedPlatform];
+    const module = weaponData.modules[selectedModule];
+
+    const buildData = {
+        platform: {
+            id: selectedPlatform,
+            ...platform
+        },
+        module: {
+            id: selectedModule,
+            ...module
+        },
+        exportDate: new Date().toISOString(),
+        gameSystem: "Axiom & Crucible",
+        tier: "Tier 0"
+    };
+
+    // Save weapon data to localStorage for character sheet import
+    localStorage.setItem('axiom-crucible-weapon', JSON.stringify(buildData));
+
+    // Create export text
+    const exportText = `
+# Axiom & Crucible - Weapon Build Export
+
+**Export Date:** ${new Date().toLocaleDateString()}
+**Game System:** Axiom & Crucible
+**Tier:** Tier 0
+
+## Platform: ${platform.name}
+- **Range:** ${platform.range}
+- **Role:** ${platform.role}
+
+### Platform Features:
+${platform.features.map(feature => `- ${feature}`).join('\n')}
+
+## Module: ${module.name}
+- **Category:** ${module.category.charAt(0).toUpperCase() + module.category.slice(1)}
+- **Flavor:** "${module.flavor}"
+
+### Module Effect:
+${module.effect}
+
+## Core Combat Stats
+- **Base Damage:** 1d6
+- **Base Difficulty:** 10
+- **Base Instability:** 0
+
+*Note: Damage is converted to Severity, not subtracted from HP*
+
+---
+Generated by Axiom & Crucible Weapon Selection Tool
+    `.trim();
+
+    // Create and download file
+    const blob = new Blob([exportText], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `axiom-crucible-${selectedPlatform}-${selectedModule}-build.md`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+
+    // Also copy to clipboard
+    navigator.clipboard.writeText(exportText).then(() => {
+        // Show success message
+        showNotification('Build exported and saved for character sheet import!');
+    }).catch(() => {
+        showNotification('Build exported to file and saved for character sheet import!');
+    });
+}
+
+function showNotification(message) {
+    // Create notification element
+    const notification = document.createElement('div');
+    notification.className = 'notification';
+    notification.textContent = message;
+    notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(45deg, #00d4ff, #0099cc);
+        color: #000;
+        padding: 1rem 2rem;
+        border-radius: 8px;
+        font-weight: 600;
+        z-index: 10000;
+        animation: slideIn 0.3s ease-out;
+        box-shadow: 0 4px 20px rgba(0, 212, 255, 0.4);
+    `;
+
+    // Add animation keyframes
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+            from { transform: translateX(0); opacity: 1; }
+            to { transform: translateX(100%); opacity: 0; }
+        }
+    `;
+    document.head.appendChild(style);
+
+    document.body.appendChild(notification);
+
+    // Remove after 3 seconds
+    setTimeout(() => {
+        notification.style.animation = 'slideOut 0.3s ease-out';
+        setTimeout(() => {
+            if (notification.parentNode) {
+                notification.parentNode.removeChild(notification);
+            }
+        }, 300);
+    }, 3000);
+}
+
+// Add keyboard navigation
+document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+        // Clear selections
+        document.querySelectorAll('.weapon-card.selected').forEach(card => {
+            card.classList.remove('selected');
+        });
+        selectedPlatform = null;
+        selectedModule = null;
+        updatePlatformDisplay();
+        updateModuleDisplay();
+        updateModuleAvailability();
+        updateExportButton();
+    }
+});
+
+// Add hover effects for better UX
+document.addEventListener('mouseover', function(e) {
+    if (e.target.closest('.weapon-card') && !e.target.closest('.weapon-card').classList.contains('disabled')) {
+        e.target.closest('.weapon-card').style.transform = 'translateY(-2px)';
+    }
+});
+
+document.addEventListener('mouseout', function(e) {
+    if (e.target.closest('.weapon-card')) {
+        const card = e.target.closest('.weapon-card');
+        if (!card.classList.contains('selected')) {
+            card.style.transform = '';
+        }
+    }
 });

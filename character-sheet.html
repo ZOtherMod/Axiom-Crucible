@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axiom & Crucible - Character Sheet</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>Axiom & Crucible</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Weapon Selection</a>
+                <a href="rules.html">Rules</a>
+                <a href="character-sheet.html" class="active">Character Sheet</a>
+                <a href="combat.html">Combat Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <header class="page-header">
+            <h1>Axiom & Crucible Character Sheet</h1>
+        </header>
+
+        <!-- Character Sheet Form -->
+        <div class="character-sheet">
+            <!-- Top Row: Identity and Stats -->
+            <div class="sheet-row top-row">
+                <!-- Character Identity Section -->
+                <section class="identity-section">
+                    <h2>Operator Identity</h2>
+                    <div class="identity-fields">
+                        <div class="field-row">
+                            <div class="field-group">
+                                <label for="char-name">Name</label>
+                                <input type="text" id="char-name" placeholder="Character Name">
+                            </div>
+                            <div class="field-group">
+                                <label for="callsign">Callsign</label>
+                                <input type="text" id="callsign" placeholder="Handle">
+                            </div>
+                        </div>
+                        <div class="field-group">
+                            <label for="concept">Concept/Role</label>
+                            <input type="text" id="concept" placeholder="Primary function">
+                        </div>
+                        <div class="field-group">
+                            <label for="background">Background</label>
+                            <textarea id="background" rows="2" placeholder="Origin and history"></textarea>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Core Stats Section -->
+                <section class="stats-section">
+                    <h2>Core Stats</h2>
+                    <div class="stats-row">
+                        <div class="stat-block">
+                            <label for="force">Force</label>
+                            <input type="number" id="force" value="0" min="-3" max="5">
+                            <span class="stat-desc">Instability tolerance</span>
+                        </div>
+                        <div class="stat-block">
+                            <label for="resilience">Resilience</label>
+                            <input type="number" id="resilience" value="0" min="-3" max="5">
+                            <span class="stat-desc">Damage capacity</span>
+                        </div>
+                        <div class="stat-block">
+                            <label for="precision">Precision</label>
+                            <input type="number" id="precision" value="0" min="-3" max="5">
+                            <span class="stat-desc">Accuracy & control</span>
+                        </div>
+                        <div class="stat-block">
+                            <label for="adaptation">Adaptation</label>
+                            <input type="number" id="adaptation" value="0" min="-3" max="5">
+                            <span class="stat-desc">Recovery & stabilization</span>
+                        </div>
+                        <div class="stat-block">
+                            <label for="cognition">Cognition</label>
+                            <input type="number" id="cognition" value="0" min="-3" max="5">
+                            <span class="stat-desc">Awareness & diagnostics</span>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Middle Row: Health Tracks and Derived Values -->
+            <div class="sheet-row middle-row">
+                <!-- Health Tracks -->
+                <section class="health-section">
+                    <h2>Health & Consequences</h2>
+                    
+                    <!-- Strain Track -->
+                    <div class="track-container strain-container">
+                        <div class="track-header">
+                            <h3>Strain</h3>
+                            <span class="track-formula">Max: 6 + Resilience = <span id="max-strain-display">6</span></span>
+                        </div>
+                        <div class="strain-track" id="strain-track"></div>
+                        <div class="track-note">Clears after scenes • Overflow → Injury</div>
+                    </div>
+
+                    <!-- Injury Track -->
+                    <div class="track-container injury-container">
+                        <div class="track-header">
+                            <h3>Injury</h3>
+                            <span class="track-formula">Max: 2 + ⌊Resilience/2⌋ = <span id="max-injuries-display">2</span></span>
+                        </div>
+                        <div class="injury-track" id="injury-track"></div>
+                        <div class="track-note">Persistent • No generic penalties</div>
+                    </div>
+
+                    <!-- Trauma Track -->
+                    <div class="track-container trauma-container">
+                        <div class="track-header">
+                            <h3>Trauma</h3>
+                            <span class="track-formula">Fixed: 2 slots</span>
+                        </div>
+                        <div class="trauma-track">
+                            <div class="trauma-slot">
+                                <input type="checkbox" id="trauma-1">
+                                <input type="text" placeholder="Permanent change description">
+                            </div>
+                            <div class="trauma-slot">
+                                <input type="checkbox" id="trauma-2">
+                                <input type="text" placeholder="Permanent change description">
+                            </div>
+                        </div>
+                        <div class="track-note warning">Permanent • System-defining • Death if full</div>
+                    </div>
+                </section>
+
+                <!-- Weapon Configuration -->
+                <section class="weapon-section">
+                    <h2>Weapon Configuration</h2>
+                    <div class="weapon-import-row">
+                        <button id="import-weapon" class="import-btn">Import Build</button>
+                    </div>
+                    
+                    <div class="weapon-config-grid">
+                        <div class="weapon-platform">
+                            <h4>Platform</h4>
+                            <input type="text" id="weapon-platform" placeholder="Ranged/Melee">
+                            <textarea id="platform-features" rows="2" placeholder="Platform features"></textarea>
+                        </div>
+                        
+                        <div class="weapon-module">
+                            <h4>Module</h4>
+                            <input type="text" id="weapon-module" placeholder="Module name">
+                            <textarea id="module-effect" rows="2" placeholder="Module effect"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="weapon-stats-row">
+                        <div class="weapon-stat">
+                            <label>Difficulty</label>
+                            <input type="number" id="weapon-difficulty" value="10" min="1" max="30">
+                        </div>
+                        <div class="weapon-stat">
+                            <label>Damage</label>
+                            <input type="text" id="weapon-damage" value="1d6">
+                        </div>
+                        <div class="weapon-stat">
+                            <label>Instability Gauge</label>
+                            <input type="number" id="instability-gauge" value="3" min="1" max="10">
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Bottom Row: Weapon Instability and Actions -->
+            <div class="sheet-row bottom-row">
+                <!-- Weapon Instability Track -->
+                <section class="instability-section">
+                    <h2>Weapon Instability</h2>
+                    <div class="instability-container">
+                        <div class="instability-track" id="weapon-instability-track"></div>
+                        <div class="instability-controls">
+                            <button id="clear-instability" class="control-btn">Clear</button>
+                            <button id="add-instability" class="control-btn">+1</button>
+                        </div>
+                        <div class="instability-status">
+                            <strong>Status:</strong> <span id="instability-status">Stable</span>
+                        </div>
+                        <div class="instability-warning">If Instability > Force during failure, consequences escalate</div>
+                    </div>
+                </section>
+
+                <!-- Actions -->
+                <section class="actions-section">
+                    <h2>Actions</h2>
+                    <div class="action-grid">
+                        <button id="save-character" class="action-btn">Save</button>
+                        <button id="load-character" class="action-btn">Load</button>
+                        <button id="export-pdf" class="action-btn">Export</button>
+                        <button id="reset-sheet" class="action-btn danger">Reset</button>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="character-sheet.js"></script>
+</body>
+</html>

@@ -1,153 +1,110 @@
-# Axiom & Crucible - Tier-0 Weapon Builder
+# Axiom & Crucible - Weapon Selection Tool
 
-A modular drag-and-drop weapon builder for the Axiom & Crucible tabletop RPG system. This tool helps players create Tier-0 weapons by selecting shells and combining layer cards according to the game's engineering mechanics.
-
-## 🚀 **Live Demo**
-**Try it now:** https://zothermod.github.io/Axiom-Crucible/
-
-## ✨ **Features**
-- **Modular Architecture**: Easily expandable for future game mechanics
-- **Drag & Drop Interface**: Intuitive weapon building experience  
-- **Real-time Validation**: Automatic compatibility and rule checking
-- **Responsive Design**: Works on desktop, tablet, and mobile
-- **Export System**: Save and share weapon designs
+An interactive web application for creating Tier 0 weapon configurations in the Axiom & Crucible tabletop RPG system.
 
 ## Features
 
-- **Shell Selection**: Choose from three different weapon shell types (Hand Tool, Static Device, Simple Automaton)
-- **Drag & Drop Interface**: Intuitive layer card system with visual feedback
-- **Validation**: Automatic checking of slot limits, required layers, and compatibility
-- **Real-time Summary**: Live updates of weapon stats, risk assessment, and descriptions
-- **Export Functionality**: Save weapon designs as JSON files
-- **Responsive Design**: Works on desktop, tablet, and mobile devices
+- **Interactive Weapon Selection**: Choose from Ranged or Melee platforms
+- **Dynamic Module System**: Select from Universal, Ranged-only, or Melee-only modules
+- **Real-time Validation**: Smart filtering of compatible combinations
+- **Export Functionality**: Download your build as a formatted markdown file
+- **Responsive Design**: Works on desktop and mobile devices
+- **Modern UI**: Sleek cyberpunk aesthetic with smooth animations
 
-## Game System Overview
+## Weapon Platforms
 
-This tool implements the Tier-0 mechanics from Axiom & Crucible, where:
+### Ranged Platform
+- **Range**: Medium
+- **Role**: Safe pressure, positioning, sustained fire
+- **Constraints**: Penalties when engaging close targets and when moving
 
-- Players choose a **Shell** (physical category) that defines the weapon's basic structure
-- **Layer Cards** are added to provide functionality (Structure, Power, Control, Sense, Safety)
-- Each shell has mandatory and optional layers with slot limitations
-- Risk management is crucial as Tier-0 technology is intentionally unstable
+### Melee Platform
+- **Range**: Engaged
+- **Role**: Control, disruption, decisive engagement
+- **Features**: Close control and opportunity pressure mechanics
 
-## How to Use
+## Module Categories
 
-1. **Select a Shell**: Choose the type of weapon you want to create
-2. **Add Layer Cards**: Drag cards from the layer pool to the appropriate slots
-3. **Review Summary**: Check your weapon's stats, risk level, and generated description
-4. **Export**: Save your design or clear to start over
+### Universal Modules
+- **Stability Module**: Replace d20 with 2d10 for more consistent results
+- **Calibration Module**: Learn from misses to improve accuracy
+- **Heat Sink Module**: Better instability management
+- **Safety Interlock**: Emergency failure mitigation
 
-## Shell Types
-
-### Hand Tool
-- **Concept**: Manually operated weapon
-- **Slots**: 2
-- **Required**: Structure, Power
-- **Optional**: Control, Safety
-
-### Static Device  
-- **Concept**: Stationary weapon mechanism
-- **Slots**: 3
-- **Required**: Structure, Power
-- **Optional**: Control, Sense, Safety
-
-### Simple Automaton
-- **Concept**: Semi-autonomous weapon
-- **Slots**: 3
-- **Required**: Structure, Power, Control
-- **Optional**: Sense, Safety
-
-## Layer Types
-
-- **Structure**: Physical framework and mounting
-- **Power**: Energy source and transmission
-- **Control**: Decision-making and triggering
-- **Sense**: Detection and awareness systems  
-- **Safety**: Failure prevention and damage mitigation
+### Platform-Specific Modules
+- **Ranged**: Targeting Gyroscope, Focus Lens
+- **Melee**: Momentum Actuator, Force-Lock Servo
 
 ## Deployment to GitHub Pages
 
-### Option 1: Upload Files Directly
+1. **Enable GitHub Pages**:
+   - Go to your repository settings
+   - Scroll to "Pages" section
+   - Select "Deploy from a branch"
+   - Choose "main" branch and "/ (root)" folder
+   - Save the settings
 
-1. Create a new repository on GitHub
-2. Upload the following files:
-   - `index.html`
-   - `styles.css` 
-   - `script.js`
-   - `README.md`
-3. Go to Settings → Pages
-4. Select "Deploy from a branch"
-5. Choose "main" branch and "/" (root) folder
-6. Click Save
+2. **Access Your Site**:
+   - Your site will be available at: `https://[username].github.io/[repository-name]`
+   - For this repo: `https://zothermod.github.io/axiom-crucible`
 
-### Option 2: Using Git Commands
-
-```bash
-# Initialize repository
-git init
-git add .
-git commit -m "Initial commit: Axiom & Crucible weapon builder"
-
-# Connect to GitHub (replace with your repo URL)
-git remote add origin https://github.com/yourusername/axiom-crucible-builder.git
-git branch -M main
-git push -u origin main
-
-# Enable GitHub Pages in repository settings
-```
-
-### Option 3: Fork and Deploy
-
-1. Fork this repository
-2. Enable GitHub Pages in your fork's settings
-3. Your site will be available at: `https://yourusername.github.io/axiom-crucible-builder`
+3. **Custom Domain** (Optional):
+   - Add a `CNAME` file with your custom domain
+   - Configure DNS settings with your domain provider
 
 ## File Structure
 
 ```
-axiom-crucible-builder/
-├── index.html          # Main HTML structure
-├── styles.css          # CSS styling and responsive design
-├── script.js           # JavaScript functionality and game logic
-└── README.md           # This documentation file
+/
+├── index.html          # Main weapon selection interface
+├── styles.css          # All styling and responsive design
+├── script.js           # Interactive functionality
+├── rules.html          # Placeholder for game rules
+├── character-sheet.html # Placeholder for character sheet
+├── combat.html         # Placeholder for combat guide
+└── README.md           # This file
 ```
 
-## Technical Details
+## Core Combat Assumptions
 
-- **Pure Frontend**: No backend required, works entirely in the browser
-- **Responsive**: Mobile-first design with CSS Grid and Flexbox
-- **Accessible**: Semantic HTML with proper ARIA labels
-- **Modern JavaScript**: ES6+ features with class-based architecture
-- **No Dependencies**: Vanilla HTML/CSS/JavaScript only
+- **Base Damage**: 1d6
+- **Base Difficulty**: 10
+- **Base Instability**: 0
+- Damage converts to Severity rather than HP reduction
+
+## Navigation
+
+The site features a top navigation bar connecting to:
+- **Weapon Selection** (Main tool)
+- **Rules** (Coming soon)
+- **Character Sheet** (Coming soon)
+- **Combat Guide** (Coming soon)
+
+## Technical Features
+
+- Pure HTML/CSS/JavaScript (no dependencies)
+- Local storage for session persistence
+- Clipboard integration for easy sharing
+- Keyboard shortcuts (ESC to clear selections)
+- Accessibility considerations
+- Mobile-responsive design
 
 ## Browser Support
 
-- Chrome 60+
-- Firefox 55+
-- Safari 12+
-- Edge 79+
+- Chrome/Edge (latest)
+- Firefox (latest)
+- Safari (latest)
+- Mobile browsers
 
 ## Contributing
 
-Feel free to submit issues or pull requests to improve the weapon builder. Some potential enhancements:
-
-- Additional shell types for higher tiers
-- More layer card options
-- Save/load functionality with localStorage
-- Weapon gallery/sharing features
-- Animation improvements
-- Combat simulation features
+This is part of the Axiom & Crucible game system. Feel free to submit issues or pull requests for:
+- Bug fixes
+- UI/UX improvements
+- Additional features
+- Mobile optimization
+- Accessibility enhancements
 
 ## License
 
-This project is released under the MIT License. See the game system documentation for specific rules and mechanics licensing.
-
-## Related Links
-
-- [Axiom & Crucible Official Documentation](link-to-game-docs)
-- [GitHub Pages Documentation](https://docs.github.com/pages)
-- [Web Accessibility Guidelines](https://www.w3.org/WAI/WCAG21/quickref/)
-
----
-
-Built with ❤️ for the Axiom & Crucible community
+Part of the Axiom & Crucible game system.

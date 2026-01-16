@@ -1,0 +1,5 @@
+theme: jekyll-theme-minimal
+title: Axiom & Crucible
+description: Interactive weapon selection tool for Tier 0 weapons and modules
+show_downloads: false
+google_analytics: # Add your GA tracking ID here if desired

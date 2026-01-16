@@ -3,309 +3,184 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Axiom & Crucible - Tier-0 Weapon Builder</title>
+    <title>Axiom & Crucible - Weapon Selection</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>Axiom & Crucible</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html" class="active">Weapon Selection</a>
+                <a href="rules.html">Rules</a>
+                <a href="character-sheet.html">Character Sheet</a>
+                <a href="combat.html">Combat Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
     <div class="container">
-        <header>
-            <h1>Axiom & Crucible</h1>
-            <h2>Tier-0 Engineering & Logic Module Weapon Builder</h2>
-            <p class="subtitle">Create your weapon by selecting a shell and adding layer cards</p>
+        <header class="page-header">
+            <h1>Tier 0 Weapon Selection</h1>
+            <p class="subtitle">Choose your Base Weapon Platform and Tier 0 Module</p>
         </header>
 
-        <div class="builder-layout">
-            <!-- Shell Selection -->
-            <section class="shell-selection">
-                <h3>1. Choose Your Weapon Shell</h3>
-                <div class="shell-grid">
-                    <div class="shell-card" data-shell="hand-tool">
-                        <div class="shell-header">
-                            <h4>Hand Tool</h4>
-                            <span class="shell-type">Weapon Shell A</span>
+        <!-- Selection Interface -->
+        <div class="selection-grid">
+            <!-- Platform Selection -->
+            <section class="selection-section">
+                <h2>Base Weapon Platform</h2>
+                <div class="platform-cards">
+                    <div class="weapon-card" data-type="platform" data-id="ranged">
+                        <h3>Ranged Platform</h3>
+                        <div class="weapon-stats">
+                            <span class="range">Range: Medium</span>
                         </div>
-                        <div class="shell-description">
-                            <p>A manually operated weapon held by a person</p>
-                            <div class="shell-stats">
-                                <div class="stat">
-                                    <span class="label">Slots:</span>
-                                    <span class="value">2</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="label">Stress Limit:</span>
-                                    <span class="value">Low</span>
-                                </div>
-                            </div>
-                            <div class="mandatory-layers">
-                                <strong>Required:</strong> Structure, Power
-                            </div>
-                            <div class="optional-layers">
-                                <strong>Optional:</strong> Control, Safety
-                            </div>
+                        <div class="weapon-description">
+                            <p><strong>Role:</strong> Safe pressure, positioning, sustained fire</p>
+                            <h4>Engagement Penalty:</h4>
+                            <ul>
+                                <li>Attacks against Engaged targets: +2 Difficulty</li>
+                                <li>Cannot Critically Succeed against Engaged targets</li>
+                            </ul>
+                            <h4>Mobility Constraint:</h4>
+                            <ul>
+                                <li>Move + Attack in same turn: +1 Difficulty</li>
+                            </ul>
                         </div>
                     </div>
 
-                    <div class="shell-card" data-shell="static-device">
-                        <div class="shell-header">
-                            <h4>Static Device</h4>
-                            <span class="shell-type">Weapon Shell B</span>
+                    <div class="weapon-card" data-type="platform" data-id="melee">
+                        <h3>Melee Platform</h3>
+                        <div class="weapon-stats">
+                            <span class="range">Range: Engaged</span>
                         </div>
-                        <div class="shell-description">
-                            <p>A stationary weapon mechanism (trap, ballista)</p>
-                            <div class="shell-stats">
-                                <div class="stat">
-                                    <span class="label">Slots:</span>
-                                    <span class="value">3</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="label">Stress Limit:</span>
-                                    <span class="value">Moderate</span>
-                                </div>
-                            </div>
-                            <div class="mandatory-layers">
-                                <strong>Required:</strong> Structure, Power
-                            </div>
-                            <div class="optional-layers">
-                                <strong>Optional:</strong> Control, Sense, Safety
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="shell-card" data-shell="simple-automaton">
-                        <div class="shell-header">
-                            <h4>Simple Automaton</h4>
-                            <span class="shell-type">Weapon Shell C</span>
-                        </div>
-                        <div class="shell-description">
-                            <p>A slow, semi-autonomous weapon</p>
-                            <div class="shell-stats">
-                                <div class="stat">
-                                    <span class="label">Slots:</span>
-                                    <span class="value">3</span>
-                                </div>
-                                <div class="stat">
-                                    <span class="label">Stress Limit:</span>
-                                    <span class="value">Low</span>
-                                </div>
-                            </div>
-                            <div class="mandatory-layers">
-                                <strong>Required:</strong> Structure, Power, Control
-                            </div>
-                            <div class="optional-layers">
-                                <strong>Optional:</strong> Sense, Safety
-                            </div>
+                        <div class="weapon-description">
+                            <p><strong>Role:</strong> Control, disruption, decisive engagement</p>
+                            <h4>Close Control (Passive):</h4>
+                            <p>On Clean Success, choose to increase or decrease target Instability by 1</p>
+                            <h4>Opportunity Pressure:</h4>
+                            <p>Free attack at +2 Difficulty if target disengages without spending an action</p>
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- Layer Card Pool -->
-            <section class="layer-cards">
-                <h3>2. Select Layer Cards</h3>
-                <p class="layer-instructions">Drag cards to your weapon slots below. Each layer can only be used once.</p>
-                
-                <div class="layer-category" data-layer="structure">
-                    <h4 class="layer-title">Structure Layer - "What holds this together?"</h4>
-                    <div class="cards-row">
-                        <div class="layer-card" data-card="basic-frame" data-layer="structure" data-slots="0" data-risk="low" draggable="true">
-                            <div class="card-header">
-                                <h5>Basic Frame</h5>
-                                <div class="card-badges">
-                                    <span class="risk-badge risk-low">Low Risk</span>
-                                    <span class="slot-badge">0 Slots</span>
-                                </div>
+            <!-- Module Selection -->
+            <section class="selection-section">
+                <h2>Tier 0 Module</h2>
+                <div class="module-categories">
+                    <div class="category">
+                        <h3>Universal Modules</h3>
+                        <div class="module-cards">
+                            <div class="weapon-card module-card" data-type="module" data-id="stability" data-category="universal">
+                                <h4>Stability Module</h4>
+                                <p class="flavor">"We don't spike. We converge."</p>
+                                <p><strong>Effect:</strong> Replace d20 with 2d10 for attack rolls</p>
                             </div>
-                            <p class="card-role">Holds all other layers together</p>
-                            <div class="card-failure">
-                                <strong>Failure:</strong> Device bends, cracks, or collapses
+
+                            <div class="weapon-card module-card" data-type="module" data-id="calibration" data-category="universal">
+                                <h4>Calibration Module</h4>
+                                <p class="flavor">"Every miss tells us something."</p>
+                                <p><strong>Effect:</strong> On Partial Failure, reduce next attack Difficulty by 1 (stacking). Resets on successful hit.</p>
+                            </div>
+
+                            <div class="weapon-card module-card" data-type="module" data-id="heat-sink" data-category="universal">
+                                <h4>Heat Sink Module</h4>
+                                <p class="flavor">"The system bleeds pressure."</p>
+                                <p><strong>Effect:</strong> Once per round, reduce Instability gained by 1 (minimum 0)</p>
+                            </div>
+
+                            <div class="weapon-card module-card" data-type="module" data-id="safety-interlock" data-category="universal">
+                                <h4>Safety Interlock</h4>
+                                <p class="flavor">"The system refuses to die."</p>
+                                <p><strong>Effect:</strong> Once per scene, downgrade Hard Failure to Partial Failure</p>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="layer-category" data-layer="power">
-                    <h4 class="layer-title">Power Layer - "What makes this do anything?"</h4>
-                    <div class="cards-row">
-                        <div class="layer-card" data-card="manual-drive" data-layer="power" data-slots="1" data-risk="low" draggable="true">
-                            <div class="card-header">
-                                <h5>Manual Drive</h5>
-                                <div class="card-badges">
-                                    <span class="risk-badge risk-low">Low Risk</span>
-                                    <span class="slot-badge">1 Slot</span>
-                                </div>
+                    <div class="category" id="ranged-modules" style="display: none;">
+                        <h3>Ranged-Only Modules</h3>
+                        <div class="module-cards">
+                            <div class="weapon-card module-card" data-type="module" data-id="targeting-gyroscope" data-category="ranged">
+                                <h4>Targeting Gyroscope</h4>
+                                <p class="flavor">"Hold still. Or don't."</p>
+                                <p><strong>Effect:</strong> Ignore the +1 Difficulty penalty for moving and attacking in the same turn</p>
                             </div>
-                            <p class="card-role">Converts your effort into motion or force</p>
-                            <div class="card-failure">
-                                <strong>Failure:</strong> Device locks up or kicks back
-                            </div>
-                        </div>
 
-                        <div class="layer-card" data-card="stored-motion" data-layer="power" data-slots="1" data-risk="medium" draggable="true">
-                            <div class="card-header">
-                                <h5>Stored Motion</h5>
-                                <div class="card-badges">
-                                    <span class="risk-badge risk-medium">Medium Risk</span>
-                                    <span class="slot-badge">1 Slot</span>
-                                </div>
-                            </div>
-                            <p class="card-role">Releases stored kinetic force</p>
-                            <div class="card-failure">
-                                <strong>Failure:</strong> Power releases all at once
+                            <div class="weapon-card module-card" data-type="module" data-id="focus-lens" data-category="ranged">
+                                <h4>Focus Lens</h4>
+                                <p class="flavor">"Depth over force."</p>
+                                <p><strong>Effect:</strong> On Critical Success, increase Severity by 1 tier (max Severe). Cannot increase Severity on Partial Failures.</p>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="layer-category" data-layer="control">
-                    <h4 class="layer-title">Control Layer - "How does it decide what to do?"</h4>
-                    <div class="cards-row">
-                        <div class="layer-card" data-card="simple-trigger" data-layer="control" data-slots="1" data-risk="low" draggable="true">
-                            <div class="card-header">
-                                <h5>Simple Trigger</h5>
-                                <div class="card-badges">
-                                    <span class="risk-badge risk-low">Low Risk</span>
-                                    <span class="slot-badge">1 Slot</span>
-                                </div>
+                    <div class="category" id="melee-modules" style="display: none;">
+                        <h3>Melee-Only Modules</h3>
+                        <div class="module-cards">
+                            <div class="weapon-card module-card" data-type="module" data-id="momentum-actuator" data-category="melee">
+                                <h4>Momentum Actuator</h4>
+                                <p class="flavor">"Once contact is made, it doesn't stop."</p>
+                                <p><strong>Effect:</strong> On hit, gain 1 Momentum. Spend Momentum to reduce next attack Difficulty by 1 or add +1 Strain to target. Momentum clears if you miss or disengage.</p>
                             </div>
-                            <p class="card-role">On/Off behavior based on one condition</p>
-                            <div class="card-failure">
-                                <strong>Failure:</strong> Trigger sticks or misfires
-                            </div>
-                        </div>
 
-                        <div class="layer-card" data-card="fixed-sequence" data-layer="control" data-slots="1" data-risk="medium" draggable="true">
-                            <div class="card-header">
-                                <h5>Fixed Sequence</h5>
-                                <div class="card-badges">
-                                    <span class="risk-badge risk-medium">Medium Risk</span>
-                                    <span class="slot-badge">1 Slot</span>
-                                </div>
-                            </div>
-                            <p class="card-role">Executes a set series of actions</p>
-                            <div class="card-failure">
-                                <strong>Failure:</strong> Steps occur out of order
+                            <div class="weapon-card module-card" data-type="module" data-id="force-lock-servo" data-category="melee">
+                                <h4>Force-Lock Servo</h4>
+                                <p class="flavor">"They don't get to choose anymore."</p>
+                                <p><strong>Effect:</strong> On Clean Success, target cannot disengage next turn without spending an action</p>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-                <div class="layer-category" data-layer="sense">
-                    <h4 class="layer-title">Sense Layer - "What can this detect?"</h4>
-                    <div class="cards-row">
-                        <div class="layer-card" data-card="physical-contact" data-layer="sense" data-slots="1" data-risk="low" draggable="true">
-                            <div class="card-header">
-                                <h5>Physical Contact</h5>
-                                <div class="card-badges">
-                                    <span class="risk-badge risk-low">Low Risk</span>
-                                    <span class="slot-badge">1 Slot</span>
-                                </div>
-                            </div>
-                            <p class="card-role">Detects direct contact</p>
-                            <div class="card-failure">
-                                <strong>Failure:</strong> Missed contact or false signals
-                            </div>
-                        </div>
-
-                        <div class="layer-card" data-card="stress-motion" data-layer="sense" data-slots="1" data-risk="medium" draggable="true">
-                            <div class="card-header">
-                                <h5>Stress & Motion</h5>
-                                <div class="card-badges">
-                                    <span class="risk-badge risk-medium">Medium Risk</span>
-                                    <span class="slot-badge">1 Slot</span>
-                                </div>
-                            </div>
-                            <p class="card-role">Detects sustained force or motion</p>
-                            <div class="card-failure">
-                                <strong>Failure:</strong> Overreaction or total silence
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="layer-category" data-layer="safety">
-                    <h4 class="layer-title">Safety Layer - "What prevents disaster?"</h4>
-                    <div class="cards-row">
-                        <div class="layer-card" data-card="emergency-release" data-layer="safety" data-slots="1" data-risk="low" draggable="true">
-                            <div class="card-header">
-                                <h5>Emergency Release</h5>
-                                <div class="card-badges">
-                                    <span class="risk-badge risk-low">Low Risk</span>
-                                    <span class="slot-badge">1 Slot</span>
-                                </div>
-                            </div>
-                            <p class="card-role">Reduces damage when something goes wrong</p>
-                            <div class="card-failure">
-                                <strong>Failure:</strong> Release jams or works partially
-                            </div>
-                        </div>
-
-                        <div class="layer-card" data-card="shock-dampening" data-layer="safety" data-slots="1" data-risk="low" draggable="true">
-                            <div class="card-header">
-                                <h5>Shock Dampening</h5>
-                                <div class="card-badges">
-                                    <span class="risk-badge risk-low">Low Risk</span>
-                                    <span class="slot-badge">1 Slot</span>
-                                </div>
-                            </div>
-                            <p class="card-role">Absorbs violent force</p>
-                            <div class="card-failure">
-                                <strong>Failure:</strong> Protection degrades or stops
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Weapon Builder Area -->
-            <section class="weapon-builder">
-                <h3>3. Your Weapon Design</h3>
-                <div class="weapon-display" id="weapon-display">
-                    <div class="no-shell-message">
-                        <p>Select a shell above to begin building your weapon</p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Weapon Summary -->
-            <section class="weapon-summary">
-                <h3>Weapon Summary</h3>
-                <div id="weapon-stats" class="weapon-stats hidden">
-                    <div class="summary-section">
-                        <h4>Configuration</h4>
-                        <div class="stat-grid">
-                            <div class="stat-item">
-                                <span class="stat-label">Shell Type:</span>
-                                <span class="stat-value" id="summary-shell">None</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Slots Used:</span>
-                                <span class="stat-value" id="summary-slots">0/0</span>
-                            </div>
-                            <div class="stat-item">
-                                <span class="stat-label">Total Risk:</span>
-                                <span class="stat-value" id="summary-risk">None</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="summary-section">
-                        <h4>Installed Layers</h4>
-                        <div id="summary-layers" class="layer-list">
-                            <p class="no-layers">No layers installed</p>
-                        </div>
-                    </div>
-                    <div class="summary-section">
-                        <h4>Description</h4>
-                        <div id="weapon-description" class="weapon-description">
-                            <p>Build your weapon to see its description</p>
-                        </div>
-                    </div>
-                    <div class="export-section">
-                        <button id="export-weapon" class="export-btn">Export Weapon</button>
-                        <button id="clear-weapon" class="clear-btn">Clear Build</button>
                     </div>
                 </div>
             </section>
         </div>
+
+        <!-- Selection Summary -->
+        <section class="selection-summary">
+            <h2>Your Weapon Configuration</h2>
+            <div class="summary-content">
+                <div class="selected-platform">
+                    <h3>Platform</h3>
+                    <div id="platform-display">
+                        <p class="placeholder">Select a platform above</p>
+                    </div>
+                </div>
+                <div class="selected-module">
+                    <h3>Module</h3>
+                    <div id="module-display">
+                        <p class="placeholder">Select a module above</p>
+                    </div>
+                </div>
+            </div>
+            <button id="export-build" class="export-button" disabled>Export Build</button>
+        </section>
+
+        <!-- Core Combat Stats -->
+        <section class="combat-stats">
+            <h2>Core Combat Assumptions</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">Base Damage:</span>
+                    <span class="stat-value">1d6</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Base Difficulty:</span>
+                    <span class="stat-value">10</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Base Instability:</span>
+                    <span class="stat-value">0</span>
+                </div>
+                <div class="stat-note">
+                    <p>Damage is converted to Severity, not subtracted from HP</p>
+                </div>
+            </div>
+        </section>
     </div>
 
     <script src="script.js"></script>

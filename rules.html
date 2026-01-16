@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Axiom & Crucible - Rules</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Top Navigation Bar -->
+    <nav class="topbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <h1>Axiom & Crucible</h1>
+            </div>
+            <div class="nav-links">
+                <a href="index.html">Weapon Selection</a>
+                <a href="rules.html" class="active">Rules</a>
+                <a href="character-sheet.html">Character Sheet</a>
+                <a href="combat.html">Combat Guide</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <header class="page-header">
+            <h1>Axiom & Crucible Rules</h1>
+            <p class="subtitle">Complete ruleset for the game system</p>
+        </header>
+
+        <!-- Rules Navigation -->
+        <nav class="rules-nav">
+            <div class="nav-tabs">
+                <button class="tab-button active" data-section="tier0">Tier 0 Weapons</button>
+                <button class="tab-button" data-section="stats">Player Stats</button>
+                <button class="tab-button" data-section="combat">Combat Flow</button>
+                <button class="tab-button" data-section="overclocking">Overclocking</button>
+                <button class="tab-button" data-section="health">Health & Injury</button>
+            </div>
+        </nav>
+
+        <!-- Rules Content Sections -->
+        <div class="rules-content">
+            <!-- Tier 0 Weapons Section -->
+            <section id="tier0" class="rule-section active">
+                <h1>TIER 0 WEAPONS & MODULES</h1>
+                
+                <p>Tier 0 represents <strong>baseline engineering</strong>: simple platforms enhanced by a single, defining module.</p>
+                
+                <p>At this tier, weapons do not win by raw damage. They win by <strong>control, reliability, or escalation discipline</strong>.</p>
+                
+                <p>At character creation, each player chooses:</p>
+                <ol>
+                    <li><strong>One Base Weapon Platform</strong></li>
+                    <li><strong>One Tier 0 Module</strong></li>
+                </ol>
+                
+                <p>No stacking. No prerequisites. One rule change per weapon.</p>
+                
+                <h2>CORE COMBAT ASSUMPTIONS</h2>
+                <ul>
+                    <li>Base Damage: <strong>1d6</strong></li>
+                    <li>Base Difficulty: <strong>10</strong></li>
+                    <li>Base Instability: <strong>0</strong></li>
+                    <li>Damage is converted to Severity, not subtracted from HP</li>
+                </ul>
+                
+                <h1>BASE WEAPON PLATFORMS</h1>
+                <p>Platforms define <strong>range, engagement rules, and inherent advantages</strong>.<br>They do not grant traits.</p>
+                
+                <h2>RANGED PLATFORM</h2>
+                <p><strong>Range:</strong> Medium</p>
+                <p><strong>Engagement Penalty:</strong></p>
+                <ul>
+                    <li>Attacks against Engaged targets: +2 Difficulty</li>
+                    <li>Cannot Critically Succeed against Engaged targets</li>
+                </ul>
+                <p><strong>Mobility Constraint:</strong></p>
+                <ul>
+                    <li>Move + Attack in the same turn: +1 Difficulty</li>
+                </ul>
+                <p><strong>Role:</strong> Safe pressure, positioning, sustained fire</p>
+                
+                <h2>MELEE PLATFORM</h2>
+                <p><strong>Range:</strong> Engaged</p>
+                <p><strong>Close Control (Passive):</strong></p>
+                <p>On a Clean Success, choose one:</p>
+                <ul>
+                    <li>Reduce target Instability by 1</li>
+                    <li>Increase target Instability by 1</li>
+                </ul>
+                <p><strong>Opportunity Pressure:</strong></p>
+                <p>If a target disengages without spending an action, you may make a free attack at +2 Difficulty</p>
+                <p><strong>Role:</strong> Control, disruption, decisive engagement</p>
+                
+                <div class="cta-section">
+                    <p>Ready to build your weapon? <a href="index.html" class="cta-link">Go to Weapon Selection Tool</a></p>
+                </div>
+            </section>
+
+            <!-- Player Stats Section -->
+            <section id="stats" class="rule-section">
+                <h1>PLAYER STATS & USING WEAPONS</h1>
+                
+                <p>This section explains how <strong>your character's abilities</strong> interact with weapons and devices.</p>
+                
+                <p>In <em>Axiom & Crucible</em>, weapons are machines. They do not become stronger because you are heroic. They become <strong>safer, more precise, and more controllable</strong> in skilled hands.</p>
+                
+                <h2>THE FIVE CORE STATS</h2>
+                <p>Your character has five core stats. Each answers a practical question.</p>
+                
+                <div class="stat-block">
+                    <h3>Cognition — "Do you understand the system?"</h3>
+                    <p><strong>Domain:</strong> Knowledge & prediction<br>
+                    <strong>Failure Type:</strong> Hidden faults get worse</p>
+                    <ul>
+                        <li>Identifies problems early</li>
+                        <li>Predicts cascading failures</li>
+                        <li>Reduces <em>unknown</em> risks</li>
+                    </ul>
+                    <blockquote>Cognition acts <strong>before</strong> failure.</blockquote>
+                </div>
+                
+                <div class="stat-block">
+                    <h3>Precision — "Can you control it exactly?"</h3>
+                    <p><strong>Domain:</strong> Accuracy & fine control<br>
+                    <strong>Failure Type:</strong> Misalignment, stray force</p>
+                    <ul>
+                        <li>Affects targeting and delicate operation</li>
+                        <li>Determines where output goes</li>
+                    </ul>
+                    <blockquote>Precision affects <strong>intent vs execution</strong>.</blockquote>
+                </div>
+                
+                <div class="stat-block">
+                    <h3>Force — "How much output can you physically channel?"</h3>
+                    <p><strong>Domain:</strong> Load tolerance<br>
+                    <strong>Failure Type:</strong> Recoil, backlash, overstrain</p>
+                    <ul>
+                        <li>Sets safe Instability threshold</li>
+                        <li>Governs overclock tolerance</li>
+                        <li>Never mitigates consequences after failure</li>
+                    </ul>
+                    <blockquote>Force governs <strong>how far you can push</strong>.</blockquote>
+                </div>
+                
+                <div class="stat-block">
+                    <h3>Resilience — "How badly does failure hurt you?"</h3>
+                    <p><strong>Domain:</strong> Damage conversion<br>
+                    <strong>Failure Type:</strong> Injury escalation</p>
+                    <ul>
+                        <li>Converts Injury → Strain</li>
+                        <li>Reduces escalation severity</li>
+                        <li>Never prevents failure</li>
+                    </ul>
+                    <blockquote>Resilience governs <strong>damage severity</strong>, not survival chance.</blockquote>
+                </div>
+                
+                <div class="stat-block">
+                    <h3>Adaptation — "Can you recover in the moment?"</h3>
+                    <p><strong>Domain:</strong> Real-time response<br>
+                    <strong>Failure Type:</strong> Failure persistence</p>
+                    <ul>
+                        <li>Clears jams</li>
+                        <li>Stabilizes systems mid-failure</li>
+                        <li>Reduces <em>duration</em> of bad states</li>
+                    </ul>
+                    <blockquote>Adaptation governs <strong>recovery</strong>, not prevention.</blockquote>
+                </div>
+                
+                <h2>STARTING STATS</h2>
+                <p>Standard Array: 2, 1, 1, 0, -1.</p>
+                
+                <h2>USING WEAPONS</h2>
+                <p>When you use a weapon, you roll:</p>
+                <p><strong>1d20 + relevant stat</strong></p>
+                <p>The stat depends on what you are doing:</p>
+                <ul>
+                    <li>Aiming → Precision</li>
+                    <li>Powering or bracing → Force</li>
+                    <li>Diagnosing behavior → Cognition</li>
+                    <li>Recovering from failure → Adaptation</li>
+                </ul>
+                <p>You do <strong>not</strong> add damage from your stats.</p>
+            </section>
+
+            <!-- Combat Flow Section -->
+            <section id="combat" class="rule-section">
+                <h1>COMBAT FLOW (OPERATOR SEQUENCE)</h1>
+                
+                <p>This section describes the <strong>exact order of operations</strong> when using weapons in combat. Follow it top to bottom. If a step is skipped, the machine behaves unpredictably.</p>
+                
+                <div class="combat-step">
+                    <h2>STEP 1: DECLARE INTENT</h2>
+                    <p>State <strong>what you are trying to do</strong>, not the numbers.</p>
+                    <p>Examples:</p>
+                    <ul>
+                        <li>"I fire a controlled shot."</li>
+                        <li>"I suppress the area."</li>
+                        <li>"I overload the emitter and punch through the armor."</li>
+                    </ul>
+                    <p>Intent determines which stat applies and which traits are relevant.</p>
+                </div>
+                
+                <div class="combat-step">
+                    <h2>STEP 2: SET BASE PROFILE</h2>
+                    <p>Write down the weapon's base values:</p>
+                    <ul>
+                        <li>Difficulty</li>
+                        <li>Damage</li>
+                        <li>Current Instability</li>
+                    </ul>
+                    <p>No modifiers yet.</p>
+                </div>
+                
+                <div class="combat-step">
+                    <h2>STEP 3: DECLARE OVERCLOCKING</h2>
+                    <p>Choose how many times you overclock <strong>before rolling</strong>.</p>
+                    <p>For each overclock:</p>
+                    <ul>
+                        <li>+2 Difficulty</li>
+                        <li>+1 Instability</li>
+                        <li>+1d4 Damage</li>
+                    </ul>
+                    <p>Mark Instability immediately. Once declared, overclocks cannot be reduced.</p>
+                </div>
+                
+                <div class="combat-step">
+                    <h2>STEP 4: APPLY TRAITS & MODULES</h2>
+                    <p>Apply weapon traits in this strict order:</p>
+                    <ol>
+                        <li><strong>Die Shape Traits</strong> (Stable, Chaotic, etc.)</li>
+                        <li><strong>Failure-Bias Traits</strong> (Forgiving, Brittle, etc.)</li>
+                        <li><strong>Control Traits</strong> (Tunable, Buffered, etc.)</li>
+                    </ol>
+                    <p>If multiple traits conflict, the weapon behaves unpredictably (GM decides the worse interpretation).</p>
+                </div>
+                
+                <div class="combat-step">
+                    <h2>STEP 5: CHECK FORCE VS INSTABILITY</h2>
+                    <p>Compare current Instability to your Force:</p>
+                    <ul>
+                        <li>Instability ≤ Force → Weapon is strained</li>
+                        <li>Instability > Force → Weapon is unstable</li>
+                        <li>Instability ≥ Force + 3 → Weapon is critical</li>
+                    </ul>
+                    <p>This does not stop the roll. It determines how failure is interpreted.</p>
+                </div>
+                
+                <div class="combat-step">
+                    <h2>STEP 6: ROLL</h2>
+                    <p>Roll: <strong>d20 (or replaced die) + relevant stat</strong></p>
+                    <p>Compare the result to the final Difficulty.</p>
+                </div>
+                
+                <h2>RESULT BANDS & MARGINS</h2>
+                <table class="result-table">
+                    <thead>
+                        <tr>
+                            <th>Margin</th>
+                            <th>Outcome</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Success by 5+</td>
+                            <td>Critical Success</td>
+                        </tr>
+                        <tr>
+                            <td>Success</td>
+                            <td>Clean Success</td>
+                        </tr>
+                        <tr>
+                            <td>Fail by 1–4</td>
+                            <td>Partial Failure</td>
+                        </tr>
+                        <tr>
+                            <td>Fail by 5+</td>
+                            <td>Hard Failure</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <!-- Overclocking Section -->
+            <section id="overclocking" class="rule-section">
+                <h1>OVERCLOCKING & MALFUNCTIONS</h1>
+                
+                <p>In <em>Axiom & Crucible</em>, weapons are machines operating near their tolerance limits.<br>You may push them harder — but machines always push back.</p>
+                
+                <h2>OVERCLOCKING (VOLUNTARY)</h2>
+                
+                <h3>What Is Overclocking?</h3>
+                <p><strong>Overclocking</strong> is the act of deliberately driving a weapon beyond its safe operating parameters to increase output.</p>
+                <p>Overclocking is declared <strong>before</strong> rolling.</p>
+                
+                <h3>Base Weapon Profile</h3>
+                <p>Every weapon has:</p>
+                <ul>
+                    <li><strong>Difficulty</strong> (Target Number)</li>
+                    <li><strong>Damage</strong></li>
+                    <li><strong>Instability</strong> (Passive instability gain per use, generally 0)</li>
+                    <li><strong>Instability Gauge</strong> (max instability)</li>
+                </ul>
+                
+                <div class="example-box">
+                    <h4>Example weapon:</h4>
+                    <ul>
+                        <li>Difficulty: <strong>10</strong></li>
+                        <li>Damage: <strong>2d6</strong></li>
+                        <li>Instability: <strong>0</strong></li>
+                        <li>Instability Gauge: 3</li>
+                    </ul>
+                </div>
+                
+                <h3>Multiple Overclocks</h3>
+                <p>You may overclock <strong>multiple times in a single action</strong>. Each overclock stacks fully.</p>
+                
+                <div class="example-box">
+                    <h4>Example (3 Overclocks):</h4>
+                    <ul>
+                        <li>Difficulty: <strong>16</strong></li>
+                        <li>Damage: <strong>2d6 + 3d4</strong></li>
+                        <li>Instability: <strong>3</strong></li>
+                    </ul>
+                </div>
+                
+                <p>There is <strong>no hard limit</strong> on overclocking — only consequences.</p>
+                
+                <h2>MALFUNCTION STATES</h2>
+                <p>When you fail a weapon roll, check the weapon's current Instability:</p>
+                
+                <div class="malfunction-state">
+                    <h3>Instability ≤ Instability gauge</h3>
+                    <p>Minor fault - Reduced damage, momentary loss of control, or warning signs</p>
+                </div>
+                
+                <div class="malfunction-state">
+                    <h3>Instability > Instability gauge</h3>
+                    <p>Major malfunction - Jam, feedback injury, component damage, or uncontrolled discharge</p>
+                </div>
+                
+                <div class="malfunction-state">
+                    <h3>Instability ≥ Double the Instability gauge</h3>
+                    <p>Catastrophic failure - Structural damage, explosions, or cascading system collapse</p>
+                </div>
+            </section>
+
+            <!-- Health & Injury Section -->
+            <section id="health" class="rule-section">
+                <h1>HEALTH, INJURY, AND TRAUMA</h1>
+                
+                <p>In <em>Axiom & Crucible</em>, health is not a number you lose.<br>It is a record of what has gone wrong.</p>
+                
+                <p>Characters are not worn down by combat — they are <strong>compromised by failure</strong>.</p>
+                
+                <h2>THE THREE CONDITION TRACKS</h2>
+                <p>Every character has three condition tracks:</p>
+                
+                <div class="condition-track">
+                    <h3>1. Strain – Short-term overload</h3>
+                    <p><strong>Maximum Strain:</strong> 6 + Resilience</p>
+                    <p><strong>You gain Strain when:</strong></p>
+                    <ul>
+                        <li>You suffer recoil or backlash</li>
+                        <li>A weapon malfunctions at low Instability</li>
+                        <li>You are hit by glancing or controlled attacks</li>
+                        <li>You overclock and narrowly fail</li>
+                    </ul>
+                    <p><strong>Recovery:</strong> Clears at the end of a scene, after rest, or via medical attention</p>
+                </div>
+                
+                <div class="condition-track">
+                    <h3>2. Injury – Lasting physical harm</h3>
+                    <p><strong>Maximum Injuries:</strong> 2 + ⌊Resilience / 2⌋</p>
+                    <p><strong>You gain Injury when:</strong></p>
+                    <ul>
+                        <li>Strain overflows</li>
+                        <li>You suffer a major malfunction</li>
+                        <li>You take a heavy or uncontrolled hit</li>
+                        <li>Instability exceeds Force during failure</li>
+                    </ul>
+                    <p><strong>Recovery:</strong> Requires time, medical care, repair, surgery, or augmentation</p>
+                </div>
+                
+                <div class="condition-track">
+                    <h3>3. Trauma – Permanent or life-altering damage</h3>
+                    <p><strong>Trauma Capacity:</strong> 2 slots by default</p>
+                    <p><strong>You gain Trauma when:</strong></p>
+                    <ul>
+                        <li>You suffer a catastrophic malfunction</li>
+                        <li>You would gain Injury while at maximum Injuries</li>
+                        <li>You are exposed to extreme feedback or explosion</li>
+                    </ul>
+                    <p><strong>Death:</strong> If you would gain Trauma and all Trauma slots are filled, the character dies.</p>
+                </div>
+                
+                <h2>DAMAGE & IMPACT SEVERITY</h2>
+                <table class="damage-table">
+                    <thead>
+                        <tr>
+                            <th>Damage Total</th>
+                            <th>Severity</th>
+                            <th>Condition Gained</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1–3</td>
+                            <td>Negligible</td>
+                            <td>No condition (narrative only)</td>
+                        </tr>
+                        <tr>
+                            <td>4–6</td>
+                            <td>Light</td>
+                            <td>+1 Strain</td>
+                        </tr>
+                        <tr>
+                            <td>7–9</td>
+                            <td>Heavy</td>
+                            <td>+2 Strain</td>
+                        </tr>
+                        <tr>
+                            <td>10–12</td>
+                            <td>Severe</td>
+                            <td>+1 Injury and +1 Strain</td>
+                        </tr>
+                        <tr>
+                            <td>13+</td>
+                            <td>Catastrophic</td>
+                            <td>+1 Trauma</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </div>
+    </div>
+
+    <script src="rules.js"></script>
+</body>
+</html>
