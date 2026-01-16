@@ -3,3 +3,21 @@ title: Axiom & Crucible
 description: Interactive weapon selection tool for Tier 0 weapons and modules
 show_downloads: false
 google_analytics: # Add your GA tracking ID here if desired
+
+# GitHub Pages settings
+baseurl: ""
+url: "https://zothermod.github.io"
+
+# Site structure
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
+
+# Include all HTML files
+include:
+  - "*.html"
+  - "*.js"
+  - "*.css"
+  - "Markdowns/*.md"
