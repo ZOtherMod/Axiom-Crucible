@@ -18,13 +18,32 @@ body {
     font-feature-settings: 'kern' 1;
     font-kerning: normal;
     line-height: 1.6;
-    color: #333;
+    color: #fff;
     background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
     background-attachment: fixed;
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+}
+
+/* Character sheet specific overrides */
+body.character-sheet-page,
+body.character-sheet-page *,
+.character-sheet,
+.character-sheet * {
+    color: #fff !important;
+}
+
+body.character-sheet-page h1,
+body.character-sheet-page h2,
+body.character-sheet-page h3,
+body.character-sheet-page h4,
+.character-sheet h1,
+.character-sheet h2,
+.character-sheet h3,
+.character-sheet h4 {
+    color: #00d4ff !important;
 }
 
 /* Windows-specific font smoothing */
@@ -1543,6 +1562,30 @@ button:disabled, .btn:disabled {
     display: block !important;
     margin-bottom: 0.25rem !important;
     text-transform: uppercase !important;
+}
+
+/* FORCE WHITE TEXT - Maximum Specificity Override */
+html body .character-sheet .weapon-config-grid .weapon-platform,
+html body .character-sheet .weapon-config-grid .weapon-module,
+html body .character-sheet .weapon-config-grid .weapon-platform *,
+html body .character-sheet .weapon-config-grid .weapon-module *,
+html body .character-sheet .weapon-section,
+html body .character-sheet .weapon-section *,
+body.character-sheet-page .weapon-platform,
+body.character-sheet-page .weapon-module,
+body.character-sheet-page .weapon-platform *,
+body.character-sheet-page .weapon-module * {
+    color: #fff !important;
+}
+
+/* Force headings to be cyan */
+html body .character-sheet .weapon-config-grid .weapon-platform h4,
+html body .character-sheet .weapon-config-grid .weapon-module h4,
+html body .character-sheet .weapon-section h2,
+body.character-sheet-page .weapon-platform h4,
+body.character-sheet-page .weapon-module h4,
+body.character-sheet-page .weapon-section h2 {
+    color: #00d4ff !important;
 }
 
 /* Universal text contrast improvements for character sheet */
