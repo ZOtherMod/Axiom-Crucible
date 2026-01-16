@@ -952,14 +952,15 @@ button:disabled, .btn:disabled {
 .stat-block input {
     background: rgba(255, 255, 255, 0.1);
     border: 2px solid #00d4ff;
-    border-radius: 50%;
-    width: 60px;
-    height: 60px;
+    border-radius: 8px;
+    width: 80px;
+    height: 40px;
     text-align: center;
     color: #fff;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     font-weight: 700;
     margin-bottom: 0.75rem;
+    padding: 0.25rem;
 }
 
 .stat-description {
@@ -1511,14 +1512,15 @@ button:disabled, .btn:disabled {
 .stat-block input {
     background: rgba(255, 255, 255, 0.1) !important;
     border: 2px solid #00d4ff !important;
-    border-radius: 50% !important;
-    width: 40px !important;
-    height: 40px !important;
+    border-radius: 8px !important;
+    width: 60px !important;
+    height: 32px !important;
     text-align: center !important;
     color: #fff !important;
-    font-size: 1.2rem !important;
+    font-size: 1.1rem !important;
     font-weight: 700 !important;
     margin-bottom: 0.25rem !important;
+    padding: 0.2rem !important;
 }
 
 .stat-desc {
