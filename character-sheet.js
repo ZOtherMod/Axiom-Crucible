@@ -1,7 +1,47 @@
 // Character Sheet JavaScript
 document.addEventListener('DOMContentLoaded', function() {
     initializeCharacterSheet();
+    forceWindowsColorFix(); // Add Windows color fix
 });
+
+// Force white text colors for Windows compatibility
+function forceWindowsColorFix() {
+    // Force weapon section colors
+    const weaponSection = document.querySelector('.weapon-section');
+    if (weaponSection) {
+        weaponSection.style.color = '#ffffff';
+        const h2 = weaponSection.querySelector('h2');
+        if (h2) h2.style.color = '#00d4ff';
+    }
+    
+    // Force weapon platform/module colors
+    const weaponPlatform = document.querySelector('.weapon-platform');
+    const weaponModule = document.querySelector('.weapon-module');
+    
+    if (weaponPlatform) {
+        weaponPlatform.style.color = '#ffffff';
+        const h4 = weaponPlatform.querySelector('h4');
+        if (h4) h4.style.color = '#00d4ff';
+    }
+    
+    if (weaponModule) {
+        weaponModule.style.color = '#ffffff';
+        const h4 = weaponModule.querySelector('h4');
+        if (h4) h4.style.color = '#00d4ff';
+    }
+    
+    // Force all text in character sheet to be white
+    const characterSheet = document.querySelector('.character-sheet-page');
+    if (characterSheet) {
+        characterSheet.style.color = '#ffffff';
+        
+        // Force all headings to cyan
+        const headings = characterSheet.querySelectorAll('h1, h2, h3, h4');
+        headings.forEach(heading => {
+            heading.style.color = '#00d4ff';
+        });
+    }
+}
 
 function initializeCharacterSheet() {
     setupStatCalculations();

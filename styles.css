@@ -2079,6 +2079,33 @@ body.character-sheet-page .stat-block input {
 
 /* Windows-specific fixes with higher specificity */
 @supports (-ms-ime-align: auto) {
+    /* Force white text on Windows 10+ */
+    html body.character-sheet-page,
+    html body.character-sheet-page *,
+    html body .character-sheet,
+    html body .character-sheet *,
+    html body .weapon-section,
+    html body .weapon-section *,
+    html body .weapon-platform,
+    html body .weapon-platform *,
+    html body .weapon-module,
+    html body .weapon-module * {
+        color: #ffffff !important;
+        -ms-high-contrast-adjust: none !important;
+    }
+    
+    /* Force cyan headings on Windows */
+    html body.character-sheet-page h1,
+    html body.character-sheet-page h2, 
+    html body.character-sheet-page h3,
+    html body.character-sheet-page h4,
+    html body .weapon-section h2,
+    html body .weapon-platform h4,
+    html body .weapon-module h4 {
+        color: #00d4ff !important;
+        -ms-high-contrast-adjust: none !important;
+    }
+    
     .character-sheet .stat-block input[type="number"],
     .character-sheet .stat-block input {
         background: rgba(255, 255, 255, 0.1) !important;
@@ -2123,6 +2150,25 @@ body.character-sheet-page .stat-block input {
 
 /* Edge Legacy support */
 @supports (-ms-accelerator: true) {
+    /* Force white text in Edge Legacy */
+    html body.character-sheet-page,
+    html body.character-sheet-page *,
+    html body .weapon-section,
+    html body .weapon-section *,
+    html body .weapon-platform,
+    html body .weapon-platform *,
+    html body .weapon-module,
+    html body .weapon-module * {
+        color: #ffffff !important;
+    }
+    
+    /* Force cyan headings in Edge Legacy */
+    html body .weapon-section h2,
+    html body .weapon-platform h4,
+    html body .weapon-module h4 {
+        color: #00d4ff !important;
+    }
+    
     body .character-sheet .stat-block input,
     body .character-sheet .stat-block input[type="number"] {
         background: rgba(255, 255, 255, 0.1) !important;
