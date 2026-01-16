@@ -2077,6 +2077,34 @@ body.character-sheet-page .stat-block input {
     }
 }
 
+/* Windows Platform Specific Overrides */
+body.windows-platform,
+body.windows-platform * {
+    color: #ffffff !important;
+}
+
+body.windows-platform h1,
+body.windows-platform h2,
+body.windows-platform h3,
+body.windows-platform h4 {
+    color: #00d4ff !important;
+}
+
+body.windows-platform .weapon-section,
+body.windows-platform .weapon-section *,
+body.windows-platform .weapon-platform,
+body.windows-platform .weapon-platform *,
+body.windows-platform .weapon-module,
+body.windows-platform .weapon-module * {
+    color: #ffffff !important;
+}
+
+body.windows-platform .weapon-section h2,
+body.windows-platform .weapon-platform h4,
+body.windows-platform .weapon-module h4 {
+    color: #00d4ff !important;
+}
+
 /* Windows-specific fixes with higher specificity */
 @supports (-ms-ime-align: auto) {
     /* Force white text on Windows 10+ */

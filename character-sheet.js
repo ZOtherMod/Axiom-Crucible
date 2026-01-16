@@ -1,8 +1,48 @@
 // Character Sheet JavaScript
 document.addEventListener('DOMContentLoaded', function() {
+    detectWindowsPlatform(); // Add Windows detection
     initializeCharacterSheet();
     forceWindowsColorFix(); // Add Windows color fix
 });
+
+// Windows platform detection and specific handling
+function detectWindowsPlatform() {
+    const isWindows = navigator.platform.indexOf('Win') > -1 || 
+                     navigator.userAgent.indexOf('Windows') > -1 ||
+                     navigator.userAgent.indexOf('Edge') > -1 ||
+                     navigator.userAgent.indexOf('Trident') > -1;
+    
+    if (isWindows) {
+        console.log('Windows platform detected - applying compatibility fixes');
+        document.body.classList.add('windows-platform');
+        
+        // Force immediate style application for Windows
+        setTimeout(() => {
+            forceWindowsColorFix();
+            checkWindowsLocalStorage();
+        }, 100);
+    }
+}
+
+// Windows-specific localStorage check
+function checkWindowsLocalStorage() {
+    try {
+        const testKey = 'test-storage-' + Date.now();
+        localStorage.setItem(testKey, 'test');
+        const retrieved = localStorage.getItem(testKey);
+        localStorage.removeItem(testKey);
+        
+        if (retrieved !== 'test') {
+            console.warn('Windows localStorage may not be functioning properly');
+            showNotification('Browser storage may not work properly. Try refreshing or check browser settings.');
+        } else {
+            console.log('Windows localStorage verified working');
+        }
+    } catch (e) {
+        console.error('Windows localStorage test failed:', e);
+        showNotification('Browser storage is blocked. Please check privacy settings.');
+    }
+}
 
 // Force white text colors for Windows compatibility
 function forceWindowsColorFix() {
@@ -213,32 +253,78 @@ function addInstability() {
 function importWeaponConfig() {
     console.log('Import weapon config called');
     
-    // Try to get weapon data from localStorage (saved from weapon selection tool)
-    const weaponData = localStorage.getItem('axiom-crucible-weapon');
+    // Windows-specific localStorage access with error handling
+    let weaponData = null;
+    try {
+        if (typeof(Storage) !== "undefined") {
+            weaponData = localStorage.getItem('axiom-crucible-weapon');
+        } else {
+            console.error('localStorage not supported');
+            showNotification('Browser storage not supported. Please use a modern browser.');
+            return;
+        }
+    } catch (e) {
+        console.error('localStorage access failed:', e);
+        showNotification('Storage access failed. Check browser permissions.');
+        return;
+    }
     
     console.log('Weapon data from localStorage:', weaponData);
     
-    if (weaponData) {
+    if (weaponData && weaponData !== 'null' && weaponData.length > 0) {
         try {
             const weapon = JSON.parse(weaponData);
             console.log('Parsed weapon data:', weapon);
             
-            // Populate weapon fields
-            document.getElementById('weapon-platform').value = weapon.platform?.name || '';
-            document.getElementById('platform-features').value = 
-                weapon.platform?.features?.join('\n') || weapon.platform?.description || '';
+            // Windows-specific DOM element access with validation
+            const platformInput = document.getElementById('weapon-platform');
+            const platformFeatures = document.getElementById('platform-features');
+            const moduleInput = document.getElementById('weapon-module');
+            const moduleEffect = document.getElementById('module-effect');
             
-            document.getElementById('weapon-module').value = weapon.module?.name || '';
-            document.getElementById('module-effect').value = weapon.module?.effect || weapon.module?.description || '';
+            if (!platformInput || !platformFeatures || !moduleInput || !moduleEffect) {
+                console.error('Form elements not found');
+                showNotification('Character sheet form not properly loaded. Please refresh the page.');
+                return;
+            }
+            
+            // Populate weapon fields with Windows-compatible data extraction
+            platformInput.value = weapon.platform?.name || weapon.platform || '';
+            
+            // Handle platform features - try multiple data sources
+            let features = '';
+            if (weapon.platform?.features) {
+                if (Array.isArray(weapon.platform.features)) {
+                    features = weapon.platform.features.join('\n');
+                } else {
+                    features = weapon.platform.features;
+                }
+            } else if (weapon.platform?.description) {
+                features = weapon.platform.description;
+            }
+            platformFeatures.value = features;
+            
+            moduleInput.value = weapon.module?.name || weapon.module || '';
+            
+            // Handle module effect - try multiple data sources
+            let effect = '';
+            if (weapon.module?.effect) {
+                effect = weapon.module.effect;
+            } else if (weapon.module?.description) {
+                effect = weapon.module.description;
+            }
+            moduleEffect.value = effect;
             
             showNotification('Weapon configuration imported successfully!');
             console.log('Weapon imported successfully');
         } catch (error) {
             console.error('Error parsing weapon data:', error);
-            showNotification('Error importing weapon configuration.');
+            console.error('Raw data:', weaponData);
+            showNotification('Error importing weapon configuration. Data may be corrupted.');
         }
     } else {
         console.log('No weapon data found in localStorage');
+        console.log('localStorage contents:', Object.keys(localStorage));
         showNotification('No weapon configuration found. Please use the Weapon Selection tool first.');
     }
 }

@@ -84,31 +84,71 @@ document.addEventListener('DOMContentLoaded', function() {
     updateModuleAvailability();
 });
 
-// Restore weapon selection from localStorage
+// Restore weapon selection from localStorage - Windows compatible
 function restoreSelectionFromLocalStorage() {
-    const weaponData = localStorage.getItem('axiom-crucible-weapon');
-    if (weaponData) {
-        try {
+    try {
+        // Check localStorage support
+        if (typeof(Storage) === "undefined") {
+            console.warn('localStorage not supported in this browser');
+            return;
+        }
+        
+        let weaponData = localStorage.getItem('axiom-crucible-weapon');
+        
+        // Try fallback storage if main storage failed
+        if (!weaponData) {
+            const fallbackData = sessionStorage.getItem('axiom-crucible-weapon-fallback');
+            if (fallbackData) {
+                const fallback = JSON.parse(fallbackData);
+                selectedPlatform = fallback.platform;
+                selectedModule = fallback.module;
+                console.log('Restored from fallback storage');
+            }
+            return;
+        }
+        
+        if (weaponData && weaponData !== 'null' && weaponData.length > 0) {
             const weapon = JSON.parse(weaponData);
+            console.log('Restoring weapon selection:', weapon);
+            
             if (weapon.platform && weapon.platform.id) {
                 selectedPlatform = weapon.platform.id;
                 const platformCard = document.querySelector(`[data-id="${selectedPlatform}"]`);
                 if (platformCard) {
+                    // Remove any existing selections first
+                    document.querySelectorAll('[data-type="platform"]').forEach(card => {
+                        card.classList.remove('selected');
+                    });
                     platformCard.classList.add('selected');
                     updatePlatformDisplay();
                 }
             }
+            
             if (weapon.module && weapon.module.id) {
                 selectedModule = weapon.module.id;
                 const moduleCard = document.querySelector(`[data-id="${selectedModule}"]`);
-                if (moduleCard) {
+                if (moduleCard && !moduleCard.classList.contains('disabled')) {
+                    // Remove any existing selections first
+                    document.querySelectorAll('[data-type="module"]').forEach(card => {
+                        card.classList.remove('selected');
+                    });
                     moduleCard.classList.add('selected');
                     updateModuleDisplay();
                 }
             }
+            
             updateExportButton();
-        } catch (error) {
-            console.log('Could not restore weapon selection:', error);
+            console.log('Selection restored successfully');
+        }
+        
+    } catch (error) {
+        console.error('Could not restore weapon selection:', error);
+        console.log('Clearing corrupted data and starting fresh');
+        try {
+            localStorage.removeItem('axiom-crucible-weapon');
+            sessionStorage.removeItem('axiom-crucible-weapon-fallback');
+        } catch (e) {
+            console.error('Could not clear corrupted data:', e);
         }
     }
 }
@@ -167,27 +207,70 @@ function selectModule(moduleId) {
     autoSaveSelection();
 }
 
-// Auto-save current selection to localStorage
+// Auto-save current selection to localStorage - Windows compatible
 function autoSaveSelection() {
     if (selectedPlatform && selectedModule) {
-        const platform = weaponData.platforms[selectedPlatform];
-        const module = weaponData.modules[selectedModule];
-        
-        const buildData = {
-            platform: {
-                id: selectedPlatform,
-                ...platform
-            },
-            module: {
-                id: selectedModule,
-                ...module
-            },
-            exportDate: new Date().toISOString(),
-            gameSystem: "Axiom & Crucible",
-            tier: "Tier 0"
-        };
-        
-        localStorage.setItem('axiom-crucible-weapon', JSON.stringify(buildData));
+        try {
+            // Check if localStorage is available (Windows IE compatibility)
+            if (typeof(Storage) === "undefined") {
+                console.warn('localStorage not available');
+                return;
+            }
+            
+            const platform = weaponData.platforms[selectedPlatform];
+            const module = weaponData.modules[selectedModule];
+            
+            if (!platform || !module) {
+                console.error('Platform or module data missing');
+                return;
+            }
+            
+            const buildData = {
+                platform: {
+                    id: selectedPlatform,
+                    name: platform.name || selectedPlatform,
+                    range: platform.range || '',
+                    role: platform.role || '',
+                    features: platform.features || [],
+                    description: platform.description || '',
+                    ...platform
+                },
+                module: {
+                    id: selectedModule,
+                    name: module.name || selectedModule,
+                    effect: module.effect || '',
+                    description: module.description || module.effect || '',
+                    ...module
+                },
+                exportDate: new Date().toISOString(),
+                gameSystem: "Axiom & Crucible",
+                tier: "Tier 0"
+            };
+            
+            // Windows-safe JSON stringify
+            const jsonString = JSON.stringify(buildData);
+            localStorage.setItem('axiom-crucible-weapon', jsonString);
+            
+            // Verify the save worked
+            const verification = localStorage.getItem('axiom-crucible-weapon');
+            if (!verification) {
+                console.error('localStorage save verification failed');
+            } else {
+                console.log('Weapon data auto-saved successfully');
+            }
+            
+        } catch (error) {
+            console.error('Auto-save failed:', error);
+            // Try alternative storage method for older Windows browsers
+            try {
+                sessionStorage.setItem('axiom-crucible-weapon-fallback', JSON.stringify({
+                    platform: selectedPlatform,
+                    module: selectedModule
+                }));
+            } catch (e) {
+                console.error('Fallback storage also failed:', e);
+            }
+        }
     }
 }
 
