@@ -1203,10 +1203,46 @@ button:disabled, .btn:disabled {
     background: rgba(0, 0, 0, 0.3);
     border-radius: 8px;
     padding: 1rem;
+    color: #fff;
 }
 
-.weapon-platform h3, .weapon-module h3 {
+.weapon-platform h3, .weapon-module h3,
+.weapon-platform h4, .weapon-module h4 {
     margin-top: 0;
+    color: #00d4ff !important;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+/* Enhanced weapon config styling for compact layout */
+.weapon-platform, .weapon-module {
+    flex: 1;
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(0, 212, 255, 0.3) !important;
+    border-radius: 6px !important;
+    padding: 0.75rem !important;
+    color: #fff !important;
+}
+
+/* Weapon section titles */
+.weapon-section h2 {
+    color: #00d4ff !important;
+    font-size: 1rem !important;
+    font-weight: 700 !important;
+    margin-bottom: 0.75rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 1px !important;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3) !important;
+    padding-bottom: 0.25rem !important;
+}
+
+.weapon-platform h4, .weapon-module h4 {
+    color: #00d4ff !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    margin: 0 0 0.5rem 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
 }
 
 .weapon-platform input, .weapon-module input,
@@ -1509,7 +1545,32 @@ button:disabled, .btn:disabled {
     text-transform: uppercase !important;
 }
 
-/* Universal stat input override - highest specificity for all platforms */
+/* Universal text contrast improvements for character sheet */
+.character-sheet {
+    color: #fff !important;
+}
+
+.character-sheet h1, .character-sheet h2, .character-sheet h3, .character-sheet h4 {
+    color: #00d4ff !important;
+}
+
+.character-sheet p, .character-sheet label, .character-sheet span {
+    color: #fff !important;
+}
+
+.character-sheet .sheet-section {
+    color: #fff !important;
+}
+
+.character-sheet .sheet-section h2 {
+    color: #00d4ff !important;
+}
+
+/* Enhanced description text */
+.track-formula, .stat-description, .weapon-description {
+    color: #ccc !important;
+    font-size: 0.85rem !important;
+}
 html body .character-sheet .sheet-section .stat-block input[type="number"],
 html body .character-sheet .sheet-section .stat-block input,
 html body .character-sheet .stats-section .stat-block input[type="number"],
@@ -1748,21 +1809,44 @@ body.character-sheet-page .stat-block input {
 
 .weapon-platform, .weapon-module {
     flex: 1;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    padding: 0.75rem;
+    background: rgba(0, 0, 0, 0.4) !important;
+    border: 1px solid rgba(0, 212, 255, 0.3) !important;
+    border-radius: 6px !important;
+    padding: 0.75rem !important;
+    color: #fff !important;
+}
+
+.weapon-platform h4, .weapon-module h4 {
+    color: #00d4ff !important;
+    font-size: 0.9rem !important;
+    font-weight: 700 !important;
+    margin: 0 0 0.5rem 0 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
 }
 
 .weapon-platform input, .weapon-module input,
 .weapon-platform textarea, .weapon-module textarea {
     width: 100% !important;
-    background: rgba(255, 255, 255, 0.1) !important;
-    border: 1px solid rgba(255, 255, 255, 0.3) !important;
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(0, 212, 255, 0.4) !important;
     border-radius: 3px !important;
     padding: 0.4rem !important;
     color: #fff !important;
     font-size: 0.8rem !important;
     margin-bottom: 0.5rem !important;
+}
+
+.weapon-platform input:focus, .weapon-module input:focus,
+.weapon-platform textarea:focus, .weapon-module textarea:focus {
+    border-color: #00d4ff !important;
+    background: rgba(255, 255, 255, 0.2) !important;
+    outline: none !important;
+}
+
+.weapon-platform input::placeholder, .weapon-module input::placeholder,
+.weapon-platform textarea::placeholder, .weapon-module textarea::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
 }
 
 .weapon-stats-row {
