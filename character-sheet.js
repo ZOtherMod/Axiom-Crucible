@@ -228,6 +228,9 @@ function setupEventListeners() {
     // Import weapon configuration
     document.getElementById('import-weapon').addEventListener('click', importWeaponConfig);
     
+    // Dice rolling functionality
+    setupDiceRoller();
+    
     // Character actions
     document.getElementById('save-character').addEventListener('click', saveCharacter);
     document.getElementById('load-character').addEventListener('click', loadCharacter);
@@ -513,4 +516,584 @@ function showNotification(message) {
             }
         }, 300);
     }, 3000);
+}
+
+// Enhanced Dice Rolling System - Smart Combination Logic
+function setupDiceRoller() {
+    const rollBtn = document.getElementById('roll-dice');
+    const modal = document.getElementById('dice-modal');
+    const closeModal = document.querySelector('.close-modal');
+    const executeDiceRoll = document.getElementById('execute-dice-roll');
+    const tabButtons = document.querySelectorAll('.tab-btn');
+    
+    let dicePresets = [];
+    
+    // Load presets from localStorage
+    loadDicePresets();
+    
+    // Windows-safe event listeners
+    if (rollBtn) {
+        rollBtn.addEventListener('click', function() {
+            modal.style.display = 'block';
+            // Ensure modal is visible on Windows
+            setTimeout(() => modal.style.opacity = '1', 10);
+        });
+    }
+    
+    if (closeModal) {
+        closeModal.addEventListener('click', function() {
+            modal.style.display = 'none';
+        });
+    }
+    
+    // Close modal when clicking outside (Windows compatible)
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+    
+    // Tab switching
+    tabButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const targetTab = this.dataset.tab;
+            switchTab(targetTab);
+        });
+    });
+    
+    // Dice roll execution
+    if (executeDiceRoll) {
+        executeDiceRoll.addEventListener('click', function() {
+            const expression = document.getElementById('dice-expression').value.trim();
+            if (expression) {
+                performDiceRoll(expression);
+            } else {
+                showNotification('Please enter a dice expression (e.g., 1d20+5 or 1d6+1d4+2)');
+            }
+        });
+    }
+    
+    // Smart dice addition buttons
+    const quickDiceButtons = document.querySelectorAll('.quick-dice');
+    quickDiceButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const sides = parseInt(this.dataset.sides);
+            addDiceToExpression(sides);
+        });
+    });
+    
+    // Modifier addition buttons
+    const modifierButtons = document.querySelectorAll('.modifier-btn');
+    modifierButtons.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const mod = this.dataset.mod;
+            addModifierToExpression(mod);
+        });
+    });
+    
+    // Clear expression button
+    const clearExprBtn = document.getElementById('clear-expression');
+    if (clearExprBtn) {
+        clearExprBtn.addEventListener('click', function() {
+            document.getElementById('dice-expression').value = '';
+        });
+    }
+    
+    // Save preset from dice expression
+    const savePresetFromDice = document.getElementById('save-preset-from-dice');
+    if (savePresetFromDice) {
+        savePresetFromDice.addEventListener('click', function() {
+            const expression = document.getElementById('dice-expression').value.trim();
+            if (expression) {
+                const name = prompt('Enter a name for this preset:');
+                if (name && name.trim()) {
+                    saveNewPreset(name.trim(), expression);
+                }
+            } else {
+                showNotification('Please enter a dice expression first');
+            }
+        });
+    }
+    
+    // Preset creation
+    const savePresetBtn = document.getElementById('save-preset');
+    if (savePresetBtn) {
+        savePresetBtn.addEventListener('click', function() {
+            const name = document.getElementById('preset-name').value.trim();
+            const expression = document.getElementById('preset-expression').value.trim();
+            
+            if (name && expression) {
+                saveNewPreset(name, expression);
+                document.getElementById('preset-name').value = '';
+                document.getElementById('preset-expression').value = '';
+            } else {
+                showNotification('Please enter both preset name and dice expression');
+            }
+        });
+    }
+    
+    // Keyboard support (Windows compatible)
+    document.addEventListener('keydown', function(e) {
+        if (modal.style.display === 'block') {
+            if (e.key === 'Escape') {
+                modal.style.display = 'none';
+            } else if (e.key === 'Enter') {
+                const activeTab = document.querySelector('.tab-content.active').id;
+                if (activeTab === 'dice-tab') {
+                    const expression = document.getElementById('dice-expression').value.trim();
+                    if (expression) {
+                        performDiceRoll(expression);
+                    }
+                }
+            }
+        }
+    });
+    
+    function switchTab(tabName) {
+        // Hide all tab contents
+        document.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        
+        // Remove active from all tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        // Show selected tab
+        const targetContent = document.getElementById(tabName + '-tab');
+        const targetBtn = document.querySelector(`[data-tab="${tabName}"]`);
+        
+        if (targetContent) targetContent.classList.add('active');
+        if (targetBtn) targetBtn.classList.add('active');
+    }
+    
+    function addDiceToExpression(sides) {
+        const expressionInput = document.getElementById('dice-expression');
+        const currentExpression = expressionInput.value.trim();
+        
+        if (currentExpression === '') {
+            // First dice
+            expressionInput.value = `1d${sides}`;
+        } else {
+            // Parse current expression and smartly combine
+            const newExpression = combineWithExistingDice(currentExpression, sides);
+            expressionInput.value = newExpression;
+        }
+    }
+    
+    function addModifierToExpression(modifier) {
+        const expressionInput = document.getElementById('dice-expression');
+        const currentExpression = expressionInput.value.trim();
+        
+        if (currentExpression === '') {
+            // Just a modifier makes no sense, add a d20 first
+            expressionInput.value = `1d20${modifier}`;
+        } else {
+            expressionInput.value = currentExpression + modifier;
+        }
+    }
+    
+    function combineWithExistingDice(expression, newDiceSides) {
+        try {
+            // Parse the existing expression
+            const parsed = parseDiceExpression(expression);
+            if (!parsed.valid) {
+                // If parsing fails, just append
+                return expression + `+1d${newDiceSides}`;
+            }
+            
+            // Look for existing dice of the same type
+            let foundExisting = false;
+            const combinedDiceTerms = parsed.diceTerms.map(term => {
+                if (term.sides === newDiceSides && !foundExisting) {
+                    foundExisting = true;
+                    return {
+                        ...term,
+                        count: term.count + 1
+                    };
+                }
+                return term;
+            });
+            
+            // If no existing dice of this type, add new term
+            if (!foundExisting) {
+                combinedDiceTerms.push({
+                    count: 1,
+                    sides: newDiceSides
+                });
+            }
+            
+            // Rebuild the expression
+            return buildExpressionFromTerms(combinedDiceTerms, parsed.modifier);
+        } catch (e) {
+            // Fallback to simple append
+            return expression + `+1d${newDiceSides}`;
+        }
+    }
+    
+    function buildExpressionFromTerms(diceTerms, modifier) {
+        let expression = '';
+        
+        // Add dice terms
+        diceTerms.forEach((term, index) => {
+            if (index > 0) expression += '+';
+            expression += `${term.count}d${term.sides}`;
+        });
+        
+        // Add modifier
+        if (modifier > 0) {
+            expression += `+${modifier}`;
+        } else if (modifier < 0) {
+            expression += `${modifier}`;
+        }
+        
+        return expression;
+    }
+    
+    function loadDicePresets() {
+        try {
+            const savedPresets = localStorage.getItem('axiom-crucible-dice-presets');
+            if (savedPresets) {
+                dicePresets = JSON.parse(savedPresets);
+                renderPresets();
+            }
+        } catch (e) {
+            console.error('Error loading dice presets:', e);
+        }
+    }
+    
+    function saveDicePresets() {
+        try {
+            localStorage.setItem('axiom-crucible-dice-presets', JSON.stringify(dicePresets));
+        } catch (e) {
+            console.error('Error saving dice presets:', e);
+            showNotification('Failed to save presets. Check browser storage permissions.');
+        }
+    }
+    
+    function saveNewPreset(name, expression) {
+        // Validate expression first
+        const parsed = parseDiceExpression(expression);
+        if (!parsed.valid) {
+            showNotification(`Invalid dice expression: ${parsed.error}`);
+            return;
+        }
+        
+        // Check if name already exists
+        const existingIndex = dicePresets.findIndex(preset => preset.name === name);
+        
+        if (existingIndex >= 0) {
+            if (confirm(`Preset "${name}" already exists. Overwrite?`)) {
+                dicePresets[existingIndex] = { name, expression };
+            } else {
+                return;
+            }
+        } else {
+            dicePresets.push({ name, expression });
+        }
+        
+        saveDicePresets();
+        renderPresets();
+        showNotification(`Preset "${name}" saved successfully!`);
+    }
+    
+    function renderPresets() {
+        const presetList = document.getElementById('preset-list');
+        if (!presetList) return;
+        
+        if (dicePresets.length === 0) {
+            presetList.innerHTML = '<p style="color: #ccc; text-align: center; padding: 1rem;">No presets saved yet</p>';
+            return;
+        }
+        
+        presetList.innerHTML = dicePresets.map((preset, index) => `
+            <div class="preset-item">
+                <div class="preset-info">
+                    <h4>${preset.name}</h4>
+                    <div class="preset-expression">${preset.expression}</div>
+                </div>
+                <div class="preset-actions">
+                    <button onclick="rollPreset(${index})">Roll</button>
+                    <button onclick="editPreset(${index})">Edit</button>
+                    <button class="delete-btn" onclick="deletePreset(${index})">Delete</button>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    // Make preset functions globally accessible
+    window.rollPreset = function(index) {
+        if (dicePresets[index]) {
+            performDiceRoll(dicePresets[index].expression);
+        }
+    };
+    
+    window.editPreset = function(index) {
+        if (dicePresets[index]) {
+            document.getElementById('preset-name').value = dicePresets[index].name;
+            document.getElementById('preset-expression').value = dicePresets[index].expression;
+            deletePreset(index, false); // Delete without confirmation for editing
+        }
+    };
+    
+    window.deletePreset = function(index, askConfirm = true) {
+        if (dicePresets[index]) {
+            if (!askConfirm || confirm(`Delete preset "${dicePresets[index].name}"?`)) {
+                dicePresets.splice(index, 1);
+                saveDicePresets();
+                renderPresets();
+                if (askConfirm) {
+                    showNotification('Preset deleted');
+                }
+            }
+        }
+    };
+}
+
+function performDiceRoll(expression) {
+    try {
+        const parsedRoll = parseDiceExpression(expression);
+        if (!parsedRoll.valid) {
+            showNotification(`Invalid dice expression: ${parsedRoll.error}`);
+            return;
+        }
+        
+        const diceDisplay = document.getElementById('dice-display');
+        const resultDisplay = document.getElementById('dice-result');
+        
+        // Clear previous results
+        diceDisplay.innerHTML = '';
+        resultDisplay.innerHTML = '';
+        
+        // Count total number of dice for animation sizing
+        const totalDice = parsedRoll.diceTerms.reduce((sum, term) => sum + term.count, 0);
+        const isSmallDice = totalDice > 4;
+        
+        // Show rolling animation for all dice
+        let diceIndex = 0;
+        parsedRoll.diceTerms.forEach(term => {
+            for (let i = 0; i < term.count; i++) {
+                const diceElement = document.createElement('div');
+                diceElement.className = 'dice-cube';
+                diceElement.textContent = '?';
+                
+                // Adjust size based on number of dice
+                if (isSmallDice) {
+                    diceElement.style.fontSize = '1.2rem';
+                    diceElement.style.width = '40px';
+                    diceElement.style.height = '40px';
+                    diceElement.style.lineHeight = '40px';
+                } else {
+                    diceElement.style.fontSize = '2rem';
+                    diceElement.style.width = '60px';
+                    diceElement.style.height = '60px';
+                    diceElement.style.lineHeight = '60px';
+                }
+                
+                diceDisplay.appendChild(diceElement);
+                diceIndex++;
+            }
+        });
+        
+        // Windows-compatible timeout for animation
+        setTimeout(() => {
+            let totalResult = 0;
+            let rollBreakdown = [];
+            let diceElementIndex = 0;
+            let allRolls = [];
+            
+            // Roll each dice term
+            parsedRoll.diceTerms.forEach(term => {
+                const termRolls = [];
+                let termTotal = 0;
+                
+                for (let i = 0; i < term.count; i++) {
+                    const roll = Math.floor(Math.random() * term.sides) + 1;
+                    termRolls.push(roll);
+                    termTotal += roll;
+                    allRolls.push(roll);
+                    
+                    // Update dice display
+                    const diceElement = diceDisplay.children[diceElementIndex];
+                    if (diceElement) {
+                        diceElement.textContent = roll;
+                        
+                        // Color code based on result
+                        if (roll === 1) {
+                            diceElement.style.background = 'linear-gradient(45deg, #ff6b6b, #ff4444)';
+                            diceElement.style.color = '#fff';
+                        } else if (roll === term.sides) {
+                            diceElement.style.background = 'linear-gradient(45deg, #2ed573, #20bf6b)';
+                            diceElement.style.color = '#000';
+                        } else {
+                            diceElement.style.background = 'linear-gradient(45deg, #00d4ff, #0099cc)';
+                            diceElement.style.color = '#000';
+                        }
+                    }
+                    diceElementIndex++;
+                }
+                
+                totalResult += termTotal;
+                if (term.count === 1) {
+                    rollBreakdown.push(`1d${term.sides}: ${termRolls[0]}`);
+                } else {
+                    rollBreakdown.push(`${term.count}d${term.sides}: [${termRolls.join(', ')}] = ${termTotal}`);
+                }
+            });
+            
+            // Add modifier
+            const finalResult = totalResult + parsedRoll.modifier;
+            
+            // Display results
+            let resultText = rollBreakdown.join(' + ');
+            if (parsedRoll.modifier !== 0) {
+                const modText = parsedRoll.modifier > 0 ? `+${parsedRoll.modifier}` : `${parsedRoll.modifier}`;
+                resultText += ` ${modText}`;
+            }
+            resultText += ` = ${finalResult}`;
+            
+            resultDisplay.innerHTML = resultText;
+            
+            // Add to history
+            const historyItem = {
+                dice: expression,
+                modifier: 0, // Already included in expression
+                rolls: rollBreakdown,
+                total: finalResult,
+                timestamp: new Date().toLocaleTimeString()
+            };
+            
+            addToRollHistory(historyItem);
+            
+        }, 1000);
+    } catch (error) {
+        console.error('Error in dice roll:', error);
+        showNotification('Error rolling dice. Check your expression format.');
+    }
+}
+
+function parseDiceExpression(expression) {
+    // Clean and normalize the expression
+    const cleanExpr = expression.toLowerCase().replace(/\s/g, '');
+    
+    // Validate basic format
+    if (!cleanExpr || cleanExpr.length === 0) {
+        return { valid: false, error: 'Empty expression' };
+    }
+    
+    // Parse dice terms and modifier
+    const diceTerms = [];
+    let modifier = 0;
+    
+    try {
+        // Split by + and - while preserving the operators
+        const parts = cleanExpr.split(/([+\-])/);
+        let currentSign = 1;
+        
+        for (let i = 0; i < parts.length; i++) {
+            const part = parts[i].trim();
+            
+            if (part === '+') {
+                currentSign = 1;
+            } else if (part === '-') {
+                currentSign = -1;
+            } else if (part && part !== '') {
+                if (part.includes('d')) {
+                    // Dice term
+                    const diceMatch = part.match(/^(\d*)d(\d+)$/);
+                    if (diceMatch) {
+                        const count = parseInt(diceMatch[1]) || 1;
+                        const sides = parseInt(diceMatch[2]);
+                        
+                        if (count <= 0 || count > 50) {
+                            return { valid: false, error: 'Dice count must be between 1-50' };
+                        }
+                        if (sides <= 0 || sides > 1000) {
+                            return { valid: false, error: 'Dice sides must be between 1-1000' };
+                        }
+                        
+                        if (currentSign < 0) {
+                            return { valid: false, error: 'Cannot subtract dice (use negative modifiers instead)' };
+                        }
+                        
+                        diceTerms.push({ 
+                            count: count, 
+                            sides: sides
+                        });
+                    } else {
+                        return { valid: false, error: `Invalid dice format: ${part}` };
+                    }
+                } else {
+                    // Modifier
+                    const modValue = parseInt(part);
+                    if (isNaN(modValue)) {
+                        return { valid: false, error: `Invalid modifier: ${part}` };
+                    }
+                    modifier += modValue * currentSign;
+                }
+            }
+        }
+        
+        if (diceTerms.length === 0) {
+            return { valid: false, error: 'Expression must contain at least one dice term' };
+        }
+        
+        // Check total dice limit
+        const totalDice = diceTerms.reduce((sum, term) => sum + term.count, 0);
+        if (totalDice > 50) {
+            return { valid: false, error: 'Total dice count cannot exceed 50' };
+        }
+        
+        return {
+            valid: true,
+            diceTerms: diceTerms,
+            modifier: modifier
+        };
+    } catch (e) {
+        return { valid: false, error: 'Invalid expression format' };
+    }
+}
+
+function addToRollHistory(rollData) {
+    const historyList = document.getElementById('roll-history');
+    if (!historyList) return;
+    
+    // Keep only last 10 rolls for Windows performance
+    const maxHistory = 10;
+    while (historyList.children.length >= maxHistory) {
+        historyList.removeChild(historyList.lastChild);
+    }
+    
+    const historyItem = document.createElement('div');
+    historyItem.className = 'history-item';
+    
+    let historyText = `${rollData.dice}: `;
+    
+    // Handle different roll types
+    if (Array.isArray(rollData.rolls) && rollData.rolls.length > 0) {
+        // Simple dice roll
+        if (typeof rollData.rolls[0] === 'number') {
+            if (rollData.rolls.length === 1) {
+                historyText += `${rollData.total}`;
+            } else {
+                historyText += `[${rollData.rolls.join(', ')}]`;
+                if (rollData.modifier !== 0) {
+                    const modText = rollData.modifier > 0 ? `+${rollData.modifier}` : `${rollData.modifier}`;
+                    historyText += ` ${modText}`;
+                }
+                historyText += ` = ${rollData.total}`;
+            }
+        } else {
+            // Mixed dice roll (rollData.rolls contains breakdown strings)
+            historyText = `${rollData.dice} = ${rollData.total}`;
+        }
+    } else {
+        historyText += `${rollData.total}`;
+    }
+    
+    historyText += ` (${rollData.timestamp})`;
+    
+    historyItem.textContent = historyText;
+    historyList.insertBefore(historyItem, historyList.firstChild);
 }

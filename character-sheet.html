@@ -144,6 +144,7 @@
                     <h2 style="color: #00d4ff !important;">Weapon Configuration</h2>
                     <div class="weapon-import-row">
                         <button id="import-weapon" class="import-btn">Import Build</button>
+                        <button id="roll-dice" class="roll-btn">🎲 Roll Dice</button>
                     </div>
                     
                     <div class="weapon-config-grid">
@@ -205,6 +206,83 @@
                         <button id="reset-sheet" class="action-btn danger">Reset</button>
                     </div>
                 </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dice Rolling Modal -->
+    <div id="dice-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🎲 Dice Roller</h3>
+                <span class="close-modal">&times;</span>
+            </div>
+            <div class="dice-controls">
+                <div class="dice-tabs">
+                    <button class="tab-btn active" data-tab="dice">Dice Rolling</button>
+                    <button class="tab-btn" data-tab="presets">Presets</button>
+                </div>
+                
+                <!-- Dice Rolling Tab -->
+                <div id="dice-tab" class="tab-content active">
+                    <div class="dice-expression-builder">
+                        <div class="dice-expression-input">
+                            <label for="dice-expression">Dice Expression:</label>
+                            <input type="text" id="dice-expression" placeholder="1d20+5 or 1d6+1d4+2" 
+                                   title="Examples: 1d20+5, 1d6+1d4, 2d8+1d10+3">
+                        </div>
+                        <div class="quick-add-dice">
+                            <span>Add Dice:</span>
+                            <button class="quick-dice" data-sides="4">+d4</button>
+                            <button class="quick-dice" data-sides="6">+d6</button>
+                            <button class="quick-dice" data-sides="8">+d8</button>
+                            <button class="quick-dice" data-sides="10">+d10</button>
+                            <button class="quick-dice" data-sides="12">+d12</button>
+                            <button class="quick-dice" data-sides="20">+d20</button>
+                            <button class="quick-dice" data-sides="100">+d100</button>
+                        </div>
+                        <div class="modifier-controls">
+                            <span>Add Modifier:</span>
+                            <button class="modifier-btn" data-mod="+1">+1</button>
+                            <button class="modifier-btn" data-mod="+2">+2</button>
+                            <button class="modifier-btn" data-mod="+3">+3</button>
+                            <button class="modifier-btn" data-mod="+5">+5</button>
+                            <button class="modifier-btn" data-mod="-1">-1</button>
+                            <button class="modifier-btn" data-mod="-2">-2</button>
+                        </div>
+                        <div class="expression-actions">
+                            <button id="clear-expression" class="action-btn">Clear</button>
+                            <button id="save-preset-from-dice" class="action-btn">Save as Preset</button>
+                        </div>
+                    </div>
+                    <button id="execute-dice-roll" class="execute-roll-btn">Roll!</button>
+                </div>
+                
+                <!-- Presets Tab -->
+                <div id="presets-tab" class="tab-content">
+                    <div class="preset-creator">
+                        <div class="preset-input-group">
+                            <label for="preset-name">Preset Name:</label>
+                            <input type="text" id="preset-name" placeholder="e.g., Attack Roll, Damage">
+                        </div>
+                        <div class="preset-input-group">
+                            <label for="preset-expression">Dice Expression:</label>
+                            <input type="text" id="preset-expression" placeholder="1d20+5">
+                        </div>
+                        <button id="save-preset" class="action-btn">Save Preset</button>
+                    </div>
+                    <div class="preset-list" id="preset-list">
+                        <!-- Presets will be populated here -->
+                    </div>
+                </div>
+            </div>
+            <div class="dice-animation-area">
+                <div id="dice-display" class="dice-display"></div>
+                <div id="dice-result" class="dice-result"></div>
+            </div>
+            <div class="dice-history">
+                <h4>Recent Rolls</h4>
+                <div id="roll-history" class="roll-history-list"></div>
             </div>
         </div>
     </div>

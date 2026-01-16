@@ -2077,6 +2077,316 @@ body.character-sheet-page .stat-block input {
     }
 }
 
+/* Dice Rolling Modal Styles - Windows Compatible */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    margin: 5% auto;
+    padding: 2rem;
+    border: 2px solid #00d4ff;
+    border-radius: 12px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 85vh;
+    overflow-y: auto;
+    color: #fff;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0, 212, 255, 0.3);
+    
+    /* Enhanced scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: #00d4ff rgba(0, 212, 255, 0.2);
+}
+
+/* Webkit scrollbar styling for Chrome/Safari/Edge */
+.modal-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.modal-content::-webkit-scrollbar-track {
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 4px;
+    margin: 12px 0;
+}
+
+.modal-content::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    border-radius: 4px;
+    transition: background 0.3s ease;
+}
+
+.modal-content::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #0099cc, #007399);
+}
+
+.modal-header {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: justify;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid rgba(0, 212, 255, 0.3);
+}
+
+.modal-header h3 {
+    color: #00d4ff !important;
+    margin: 0;
+    font-size: 1.5rem;
+}
+
+.close-modal {
+    color: #fff;
+    font-size: 2rem;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    transition: color 0.3s ease;
+}
+
+.close-modal:hover {
+    color: #00d4ff;
+}
+
+.dice-controls {
+    margin-bottom: 2rem;
+}
+
+.dice-type-selection {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+}
+
+.dice-btn {
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    color: #000;
+    border: none;
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 50px;
+    font-size: 1rem;
+}
+
+.dice-btn:hover {
+    background: linear-gradient(45deg, #00a8cc, #007399);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 212, 255, 0.4);
+}
+
+.dice-btn.active {
+    background: linear-gradient(45deg, #ff6b6b, #ff4444);
+    color: #fff;
+}
+
+.dice-count, .dice-modifier {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.dice-count label, .dice-modifier label {
+    color: #fff !important;
+    font-weight: 600;
+    min-width: 120px;
+}
+
+.dice-count input, .dice-modifier input {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(0, 212, 255, 0.4) !important;
+    border-radius: 4px !important;
+    padding: 0.5rem !important;
+    color: #fff !important;
+    width: 80px !important;
+    text-align: center !important;
+}
+
+.execute-roll-btn {
+    background: linear-gradient(45deg, #2ed573, #20bf6b);
+    color: #000;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    margin-top: 1rem;
+}
+
+.execute-roll-btn:hover {
+    background: linear-gradient(45deg, #20bf6b, #17a085);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 213, 115, 0.4);
+}
+
+.dice-animation-area {
+    text-align: center;
+    padding: 2rem;
+    margin: 1rem 0;
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.dice-display {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    min-height: 80px;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.dice-cube {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    border-radius: 8px;
+    color: #000;
+    font-weight: 900;
+    font-size: 2rem;
+    line-height: 60px;
+    text-align: center;
+    margin: 0.25rem;
+    animation: rollAnimation 1s ease-in-out;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes rollAnimation {
+    0% { transform: rotateX(0deg) rotateY(0deg) scale(1); }
+    25% { transform: rotateX(180deg) rotateY(90deg) scale(1.1); }
+    50% { transform: rotateX(360deg) rotateY(180deg) scale(0.9); }
+    75% { transform: rotateX(540deg) rotateY(270deg) scale(1.1); }
+    100% { transform: rotateX(720deg) rotateY(360deg) scale(1); }
+}
+
+.dice-result {
+    font-size: 1.5rem;
+    color: #00d4ff;
+    font-weight: 700;
+    margin-top: 1rem;
+}
+
+.dice-history {
+    border-top: 1px solid rgba(0, 212, 255, 0.3);
+    padding-top: 1rem;
+}
+
+.dice-history h4 {
+    color: #00d4ff !important;
+    margin-bottom: 0.5rem;
+}
+
+.roll-history-list {
+    max-height: 150px;
+    overflow-y: auto;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 4px;
+    padding: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: #00d4ff rgba(0, 212, 255, 0.2);
+}
+
+.roll-history-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.roll-history-list::-webkit-scrollbar-track {
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 3px;
+}
+
+.roll-history-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    border-radius: 3px;
+}
+
+.roll-history-list::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #0099cc, #007399);
+}
+
+.history-item {
+    padding: 0.25rem 0.5rem;
+    margin-bottom: 0.25rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 3px;
+    font-size: 0.9rem;
+    color: #fff !important;
+}
+
+.roll-btn {
+    background: linear-gradient(45deg, #ff6b6b, #ff4444);
+    color: #fff !important;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+
+.roll-btn:hover {
+    background: linear-gradient(45deg, #ff5252, #ff1744);
+    transform: translateY(-1px);
+    box-shadow: 0 3px 10px rgba(255, 107, 107, 0.4);
+}
+
+.weapon-import-row {
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+}
+
 /* Windows Platform Specific Overrides */
 body.windows-platform,
 body.windows-platform * {
@@ -2239,5 +2549,309 @@ body.windows-platform .weapon-module h4 {
     
     .action-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* Enhanced Dice Modal Styles - Simplified Mixed Dice System */
+.dice-tabs {
+    display: flex;
+    margin-bottom: 1.5rem;
+    border-bottom: 2px solid #00d4ff;
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 8px 8px 0 0;
+}
+
+.tab-btn {
+    flex: 1;
+    padding: 0.8rem 1rem;
+    background: none;
+    border: none;
+    color: #00d4ff !important;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    border-radius: 8px 8px 0 0;
+}
+
+.tab-btn:hover {
+    background: rgba(0, 212, 255, 0.2);
+}
+
+.tab-btn.active {
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    color: #000 !important;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+/* Dice Expression Builder */
+.dice-expression-builder {
+    background: rgba(0, 212, 255, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.dice-expression-input {
+    margin-bottom: 1rem;
+}
+
+.dice-expression-input label {
+    display: block;
+    color: #00d4ff !important;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+#dice-expression {
+    width: calc(100% - 1.6rem);
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 2px solid #00d4ff !important;
+    border-radius: 8px;
+    color: #fff !important;
+    font-size: 1rem;
+    font-family: 'Courier New', monospace;
+}
+
+#dice-expression:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+}
+
+.quick-add-dice {
+    margin: 1rem 0;
+}
+
+.quick-add-dice span {
+    color: #00d4ff !important;
+    font-weight: 600;
+    margin-right: 1rem;
+    display: inline-block;
+    min-width: 80px;
+}
+
+.quick-dice {
+    background: rgba(0, 212, 255, 0.2);
+    border: 1px solid #00d4ff;
+    color: #fff !important;
+    padding: 0.4rem 0.8rem;
+    margin: 0.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    min-width: 50px;
+}
+
+.quick-dice:hover {
+    background: #00d4ff;
+    color: #000 !important;
+}
+
+.modifier-controls {
+    margin: 1rem 0;
+}
+
+.modifier-controls span {
+    color: #00d4ff !important;
+    font-weight: 600;
+    margin-right: 1rem;
+    display: inline-block;
+    min-width: 80px;
+}
+
+.modifier-btn {
+    background: rgba(255, 171, 0, 0.2);
+    border: 1px solid #ffab00;
+    color: #fff !important;
+    padding: 0.4rem 0.8rem;
+    margin: 0.2rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    min-width: 40px;
+}
+
+.modifier-btn:hover {
+    background: #ffab00;
+    color: #000 !important;
+}
+
+.expression-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.action-btn {
+    background: rgba(0, 212, 255, 0.3);
+    border: 1px solid #00d4ff;
+    color: #fff !important;
+    padding: 0.6rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.action-btn:hover {
+    background: #00d4ff;
+    color: #000 !important;
+}
+
+/* Preset Management */
+.preset-creator {
+    background: rgba(0, 212, 255, 0.05);
+    padding: 1rem;
+    border-radius: 8px;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(0, 212, 255, 0.2);
+}
+
+.preset-input-group {
+    margin-bottom: 1rem;
+}
+
+.preset-input-group label {
+    display: block;
+    color: #00d4ff !important;
+    margin-bottom: 0.5rem;
+    font-weight: 600;
+}
+
+.preset-input-group input {
+    width: calc(100% - 1.6rem);
+    padding: 0.8rem;
+    background: rgba(0, 0, 0, 0.3) !important;
+    border: 2px solid #00d4ff !important;
+    border-radius: 8px;
+    color: #fff !important;
+}
+
+.preset-input-group input:focus {
+    outline: none;
+    box-shadow: 0 0 15px rgba(0, 212, 255, 0.5);
+}
+
+.preset-list {
+    max-height: 200px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #00d4ff rgba(0, 212, 255, 0.2);
+}
+
+.preset-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.preset-list::-webkit-scrollbar-track {
+    background: rgba(0, 212, 255, 0.1);
+    border-radius: 3px;
+}
+
+.preset-list::-webkit-scrollbar-thumb {
+    background: linear-gradient(45deg, #00d4ff, #0099cc);
+    border-radius: 3px;
+}
+
+.preset-list::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(45deg, #0099cc, #007399);
+}
+
+.preset-item {
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    border-radius: 8px;
+    padding: 0.8rem;
+    margin-bottom: 0.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.preset-info h4 {
+    color: #00d4ff !important;
+    margin: 0 0 0.3rem 0;
+    font-size: 1rem;
+}
+
+.preset-info .preset-expression {
+    color: #ccc !important;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+}
+
+.preset-actions {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.preset-actions button {
+    background: rgba(0, 212, 255, 0.3);
+    border: 1px solid #00d4ff;
+    color: #fff !important;
+    padding: 0.4rem 0.8rem;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: all 0.2s ease;
+}
+
+.preset-actions button:hover {
+    background: #00d4ff;
+    color: #000 !important;
+}
+
+.preset-actions .delete-btn:hover {
+    background: #ff4444 !important;
+    border-color: #ff4444;
+    color: #fff !important;
+}
+
+/* Responsive enhancements for tabs */
+@media (max-width: 768px) {
+    .dice-tabs {
+        flex-direction: column;
+    }
+    
+    .tab-btn {
+        border-radius: 4px;
+        margin-bottom: 0.25rem;
+    }
+    
+    .mixed-dice-builder,
+    .preset-creator {
+        padding: 0.8rem;
+    }
+    
+    .quick-add-dice {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.25rem;
+        align-items: center;
+    }
+    
+    .expression-actions {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .preset-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.5rem;
+    }
+    
+    .preset-actions {
+        width: 100%;
+        justify-content: flex-end;
     }
 }
